@@ -253,7 +253,7 @@ sideaffect repeat 3 Side Affect                    | text             | $s side 
 
 The preprocess script will try to preserve any branching logic you put in place ahead of time while inserting any necessary additional logic. The intention is that it should work as one would expect. If a situation is encountered where this is not true, please report it.
 
-## Custom fields in with repeating fields/groups
+## Custom fields within repeating fields/groups
 Custom field types should work seamlessly with repeating fields and should not require any additional work. If any bugs are encountered, please report them.
 
 ## Caveats
