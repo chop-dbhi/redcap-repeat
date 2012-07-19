@@ -10,7 +10,7 @@ Instead of manually creating multiple RedCap&trade; fields to capture data for a
 
 ### Minimum and Maximum
 
-Instead of creating two RedCap&trade; number fields to capture a range of numbers, just use the minmax field type. Give the proprocess script this:
+Instead of creating two RedCap&trade; number fields to capture a range of numbers, just use the minmax field type. Give the preprocess script this:
 
 Field Name |  Field Type |  Field Label            |Text Validation Type |
 -----------|-------------|-------------------------|---------------------|
