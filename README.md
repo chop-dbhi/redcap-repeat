@@ -1,9 +1,9 @@
 RedCap&trade; Preprocess Script
 =================
 
-Preprocess script for RedCap&trade; data dictionaries to support custom types and repeating fields.
+Preprocess script for RedCap&trade; data dictionaries witten by CBMi to support custom types and repeating fields.
 
-RedCap&trade; is a great tool. It allows anyone to quickly and easily create and share case report forms and surveys. But sometimes to capture common concepts, or multiple instances of a single concept, it requires creating groups of fields with complex branching logic over and over. This preprocess script seeks to solve this problem.
+RedCap&trade; is a great tool. It allows anyone to quickly and easily create and share case report forms and surveys. But sometimes to capture common concepts, or multiple instances of a single concept, you need to create groups of fields with complex branching logic over and over. This preprocess script seeks to solve this problem.
 
 ## Specify commonly used field types in one line
 Instead of manually creating multiple RedCap&trade; fields to capture data for a single discrete value, use a custom type, and let this preprocess script do all the hard work. Let's see a few examples.
@@ -109,7 +109,7 @@ potassium\_level            | text             | Potassium level              | 
 potassium\_level\_units     | text             | Potassium level units        | 
 
 #### Convenience unit types
-There are two convenience unit types that work the same way as value\_with\_unit, but instead of a free text input for units, provide a drop down with specific choices. These are
+There are two convenience unit types that work the same way as value\_with\_unit, but instead of a free text input for units, provide a dropdown with specific choices. These are
 
 * weight\_value\_with\_units
 * height\_value\_with\_units
