@@ -14,7 +14,7 @@ Instead of creating two RedCap&trade; number fields to capture a range of number
 
 Field Name |  Field Type |  Field Label            |Text Validation Type |
 -----------|-------------|-------------------------|---------------------|
-temp       | minmax      | Temperature $placheolder| number              |
+temp       | minmax      | Temperature $placeholder| number              |
 
 and it will turn it into this:
 
@@ -63,7 +63,7 @@ will become
 Field Name |  Field Type         |  Field Label            | Choices                               |Branching Logic|
 -----------|---------------------|-------------------------|---------------------------------------|---------------|
 temp       | checkbox            | Affected relatives      | 1, Mom &#124;  2, Dad &#124; 3, Other |			   |
-temp\_other | text                |Please specify other affected relative|                          |[temp(3)] = '1'|
+temp\_other | text               | Please specify other affected relative|                          |[temp(3)] = '1'|
 
 ### Checkbox with details for each option
 
@@ -163,7 +163,7 @@ For example:
 
 Field Name                 |  Field Type      |  Field Label                 | Branching Logic
 ---------------------------|------------------|------------------------------|------------------
-gene${d}\_name repeat 4 Gene | text             | Gene $d name                |
+gene${d}\_name repeat 4 Gene | text           | Gene $d name                |
 
 will become:
 
@@ -205,7 +205,7 @@ xray\_result3  | notes       | Result of 3rd xray                   |           
 
 ### Nesting groups of repeating fields
 
-Sometimes a single group of repeating fields may not be enough. You might be trying to capture a list of medications, each with a list of side affects. To accomplish this you can nest startrepeat-endrepeat groups or single repeat fields inside of other startrepeat-endrepeat groups. The behavior should be just as you would expect. The only additional functionality is that you can use $s1 or $d1 in Field Labels to refer to the iteration of outer groups. For example, $s will always refer to the current (innermost) group, and $1 will always refer to the outermost group. If you had 2 nested groups, $1 would refer to the iteration of the outermost group, $2 would refer to the iteration of the middle group, and $s would still refer to the iteration of the innermost group. Examples should clear this up.
+Sometimes a single group of repeating fields may not be enough. For example, you might be trying to capture a list of medications, each with a list of side affects. To accomplish this you can nest startrepeat-endrepeat groups or single repeat fields inside of other startrepeat-endrepeat groups. The behavior should be just as you would expect. The only additional functionality is that you can use $s1 or $d1 in Field Labels to refer to the iteration of outer groups. For example, $s will always refer to the current (innermost) group, and $1 will always refer to the outermost group. If you had 2 nested groups, $1 would refer to the iteration of the outermost group, $2 would refer to the iteration of the middle group, and $s would still refer to the iteration of the innermost group. Examples should clear this up.
 
 Field Name                                         |  Field Type      |  Field Label        | Text Validation Type | Branching Logic
 ---------------------------------------------------|------------------|---------------------|----------------------|-----------------------|----------------
@@ -247,7 +247,7 @@ Field Name                                         |  Field Type      |  Field L
 medication${d}\_name startrepeat 3 Medication       | text             | $s medication name               |                       |
 medication${d}\_date                                | text             | Date $st medication taken        | date                  |
 sideaffect repeat 3 Side Affect                    | text             | $s side affect of medication $d1 |                       |
-&nbsp;endrepeat                                         |                  |                                  |                       |
+&nbsp;endrepeat                                    |                  |                                  |                       |
  
 ## Branching Logic Details
 
