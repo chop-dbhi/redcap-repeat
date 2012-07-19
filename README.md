@@ -10,13 +10,13 @@ Instead of manually creating multiple RedCap fields to capture data for a single
 
 ### Minimum and Maximum
 
-Instead of created two RedCap number fields to capture a range of numbers, just use the minmax field type. Give the RedCap Preprocessor this:
+Instead of created two RedCap number fields to capture a range of numbers, just use the minmax field type. Give the proprocess script this:
 
 Field Name |  Field Type |  Field Label            |
 -----------|-------------|-------------------------|
 temp       | minmax      | Temperature $placheolder| 
 
-and it will turn it into this
+and it will turn it into this:
 
 Field Name  |  Field Type |  Field Label            |
 ------------|-------------|-------------------------|
@@ -27,14 +27,14 @@ All other columns will be preserved just as you would expect.
 
 ### Checkbox with Other
 
-Specify checkbox\_other to automatically create checkbox field followed by a text field to specify further details that will only become visible if "Other" is checked.
+Specify checkbox\_other to automatically create a checkbox field followed by a text field to specify further details. The branching logic to only show the details field when the Other choice is selected will be written for you.
 
 
 Field Name |  Field Type         |  Field Label            | Choices                               |
 -----------|---------------------|-------------------------|---------------------------------------|
 relative   | checkbox\_other      | Affected relatives      | 1, Mom &#124;  2, Dad &#124; 3, Other | 
 
-will become
+will become:
 
 
 Field Name     |  Field Type         |  Field Label            | Choices                               |Branching Logic|
@@ -42,11 +42,12 @@ Field Name     |  Field Type         |  Field Label            | Choices        
 relative       | checkbox            | Affected relatives      | 1, Mom &#124;  2, Dad &#124; 3, Other |  		   |
 relative\_other | text                | Other Affected relatives|                                      |[relative(3)] = '1'|
 
-The preprocessor tries to use very generic language for generated field labels. Placing a pipe in the Field Label field followed by something like this
+#### Controlling the language used in the Field Label for generated fields
+The preprocess script tries to use very generic language for generated Field lLbels. Placing a pipe in the Field Label field followed by something like this
 
 	Please specify $placeholder relative
 	
-will allow you to control the generated field label, producing this
+will allow you to control the generated Field Label, producing this
 
 	Please specify other relative
 	
@@ -70,7 +71,7 @@ Similar to checkbox\_other, the checkbox\_details type will create textbox field
 
 ### Radio/Dropdown other and Radio/Dropdown with details
 
-There are equivalent custom types for radio and dropdowns that work exactly the same as the checkbox\_other and checkbox\_details types.
+There are equivalent custom types for radio and dropdown (radio\_other, radio\_details, dropdown\_other, and dropdown\_details) that work exactly the same as the checkbox\_other and checkbox\_details types.
 
 ### Age in weeks and days
 The custom type age\_weeks\_days will create the two individual week and day fields with the correct range restrictions. This is especially useful for capturing gestational age.
@@ -81,7 +82,7 @@ Field Name      |  Field Type    |  Field Label                 | Min Value | Ma
 ----------------|----------------|------------------------------|-----------|----------|
 gestational\_age | age\_weeks\_days | Gestational age $placeholder |           |          |
 
-becomes
+becomes:
 
 Field Name            |  Field Type    |  Field Label                 | Min Value | Max Value|
 ----------------------|----------------|------------------------------|-----------|----------|
@@ -90,7 +91,7 @@ gestational\_age\_days  | text           | Gestational age in days      | 0     
 
 ### Age in years and months
 
-There is a custom field available to age in years and months as well. Specify the type as age\_years\_months to use it. It works exactly the same as age\_weeks\_days
+There is a custom field available for age in years and months as well. Specify the type as age\_years\_months to use it. It works exactly the same as age\_weeks\_days
 
 ### Value with Units
 
@@ -104,8 +105,8 @@ becomes
 
 Field Name                  |  Field Type      |  Field Label                 | Text Validation Type
 ----------------------------|------------------|------------------------------|---------------------
-potassium\_level             | text             | Potassium level              | number
-potassium\_level\_units       | text             | Potassium level units        | 
+potassium\_level            | text             | Potassium level              | number
+potassium\_level\_units     | text             | Potassium level units        | 
 
 #### Convenience unit types
 There are two convenience unit types that work the same way as value\_with\_unit, but instead of a free text input for units, provide a drop down with specific choices. These are
@@ -115,7 +116,7 @@ There are two convenience unit types that work the same way as value\_with\_unit
 
 ## Repeating fields
 
-RedCap does not support the ability to specify that a given field repeats a variable number of times. For example, specifyng a list of medications requires creating a number of medicine fields and various complex branching schemes. Preprocess can help.
+RedCap does not support the ability to specify that a given field repeats a variable number of times. For example, specifyng a list of medications requires creating a number of medicine fields and various complex branching schemes. The preprocess can help.
 
 ### The Basics
 
