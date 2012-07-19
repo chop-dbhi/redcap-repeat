@@ -121,9 +121,9 @@ RedCap does not support the ability to specify that a given field repeats a vari
 ### The Basics
 
 To specify that a field repeats, use the following in the field name coloumn
-<field\_name> repeat <maximum number of times field repeats> <Name of Repeat>
+\<field\_name\> repeat \<maximum number of times field repeats\> \<Name of Repeat\>
 
-The <Name of Repeat> attribute will be used to construct a question asking the user how many times the field repeats. For example
+The \<Name of Repeat\> attribute will be used to construct a question asking the user how many times the field repeats. For example
 
 Field Name                              |  Field Type      |  Field Label                 | Branching Logic
 ----------------------------------------|------------------|------------------------------|-----------------
