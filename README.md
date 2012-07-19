@@ -217,25 +217,25 @@ will become
 
 Field Name                      |  Field Type |  Field Label                                | Text Validation Type  | Text Validation Min| Text Validation Max| Branching Logic
 --------------------------------|-------------|--------------------------------------------|------------------------|-----------------------|-----------------|---------------------------------------------|
-medication\_group\_no             | text        | How many medications do you want to enter? |  number                | 0                     |   3             |
-medication1\_name                | text        | 1st medication name                        |                        |                       |                 | [medication\_group\_no] >= 1
-medication1\_sideaffect\_group\_no | text        | How many side affects do you want to enter?|  number                | 0                     |   3             | [medication\_group\_no] >= 1
-medication1\_sideaffect1         | text        | 1st side affect for medication 1           |                        |                       |                 | [medication1\_sideaffect\_group\_no] >= 1
-medication1\_sideaffect2         | text        | 2nd side affect for medication 1           |                        |                       |                 | [medication1\_sideaffect\_group\_no] >= 2
-medication1\_sideaffect3         | text        | 3rd side affect for medication 1           |                        |                       |                 | [medication1\_sideaffect\_group\_no] >= 3
-medication1\_date                | text        | Date 1st medication taken                  |  date                  |                       |                 | [medication\_group\_no] >= 1
-medication2\_name                | text        | 2nd medication name                        |                        |                       |                 | [medication\_group\_no] >= 2
-medication2\_sideaffect\_group\_no | text        | How many side affects do you want to enter?|  number                | 0                     |   3             | [medication\_group\_no] >= 2
-medication2\_sideaffect1         | text        | 1st side affect for medication 2           |                        |                       |                 | [medication2\_sideaffect\_group\_no] >= 1
-medication2\_sideaffect2         | text        | 2nd side affect for medication 2           |                        |                       |                 | [medication2\_sideaffect\_group\_no] >= 2
-medication2\_sideaffect3         | text        | 3rd side affect for medication 2           |                        |                       |                 | [medication2\_sideaffect\_group\_no] >= 3
-medication2\_date                | text        | Date 2nd medication taken                  | date                   |                       |                 | [medication\_group\_no] >= 2
-medication3\_name                | text        | 3rd medication name                        |                        |                       |                 | [medication\_group\_no] >= 3
-medication3\_sideaffect\_group\_no | text        | How many side affects do you want to enter?|  number                | 0                     |   3             | [medication\_group\_no] >= 3
-medication3\_sideaffect1         | text        | 1st side affect for medication 3           |                        |                       |                 | [medication3\_sideaffect\_group\_no] >= 1
-medication3\_sideaffect2         | text        | 2nd side affect for medication 3           |                        |                       |                 | [medication3\_sideaffect\_group\_no] >= 2
-medication3\_sideaffect3         | text        | 3rd side affect for medication 3           |                        |                       |                 | [medication3\_sideaffect\_group\_no] >= 3
-medication3\_date                | text        | Date 3rd medication taken                  |     date               |                       |                 | [medication\_group\_no] >= 3
+medication\_group\_no             | text        | How many medications do you want to enter? |  number                | 0                     |   3             |                                           |
+medication1\_name                | text        | 1st medication name                        |                        |                       |                 | [medication\_group\_no] >= 1               | 
+medication1\_sideaffect\_group\_no | text        | How many side affects do you want to enter?|  number                | 0                     |   3             | [medication\_group\_no] >= 1             |
+medication1\_sideaffect1         | text        | 1st side affect for medication 1           |                        |                       |                 | [medication1\_sideaffect\_group\_no] >= 1  |
+medication1\_sideaffect2         | text        | 2nd side affect for medication 1           |                        |                       |                 | [medication1\_sideaffect\_group\_no] >= 2  |
+medication1\_sideaffect3         | text        | 3rd side affect for medication 1           |                        |                       |                 | [medication1\_sideaffect\_group\_no] >= 3  |
+medication1\_date                | text        | Date 1st medication taken                  |  date                  |                       |                 | [medication\_group\_no] >= 1               |
+medication2\_name                | text        | 2nd medication name                        |                        |                       |                 | [medication\_group\_no] >= 2               |
+medication2\_sideaffect\_group\_no | text        | How many side affects do you want to enter?|  number                | 0                     |   3             | [medication\_group\_no] >= 2             |
+medication2\_sideaffect1         | text        | 1st side affect for medication 2           |                        |                       |                 | [medication2\_sideaffect\_group\_no] >= 1  |
+medication2\_sideaffect2         | text        | 2nd side affect for medication 2           |                        |                       |                 | [medication2\_sideaffect\_group\_no] >= 2  |
+medication2\_sideaffect3         | text        | 3rd side affect for medication 2           |                        |                       |                 | [medication2\_sideaffect\_group\_no] >= 3  |
+medication2\_date                | text        | Date 2nd medication taken                  | date                   |                       |                 | [medication\_group\_no] >= 2               |
+medication3\_name                | text        | 3rd medication name                        |                        |                       |                 | [medication\_group\_no] >= 3               |
+medication3\_sideaffect\_group\_no | text        | How many side affects do you want to enter?|  number                | 0                     |   3             | [medication\_group\_no] >= 3             |
+medication3\_sideaffect1         | text        | 1st side affect for medication 3           |                        |                       |                 | [medication3\_sideaffect\_group\_no] >= 1  |
+medication3\_sideaffect2         | text        | 2nd side affect for medication 3           |                        |                       |                 | [medication3\_sideaffect\_group\_no] >= 2  |
+medication3\_sideaffect3         | text        | 3rd side affect for medication 3           |                        |                       |                 | [medication3\_sideaffect\_group\_no] >= 3  |
+medication3\_date                | text        | Date 3rd medication taken                  |     date               |                       |                 | [medication\_group\_no] >= 3               |
 
 If a nested repeating group or field is actually the last field of its parent group then add a blank row with the following as Field Name
     <space>endrepeat
