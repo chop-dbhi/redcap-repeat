@@ -245,7 +245,7 @@ For example, in the above example, if you wanted the side affects to be the last
 Field Name                                         |  Field Type      |  Field Label        | Text Validation Type | Branching Logic
 ---------------------------------------------------|------------------|---------------------|----------------------|-----------------------|----------------
 medication${d}\_name startrepeat 3 Medication       | text             | $s medication name               |                       |
-medication${d}\_date                                | text             | Date $st medication taken        | date                  |
+medication${d}\_date                                | text             | Date $s medication taken        | date                  |
 sideaffect repeat 3 Side Affect                    | text             | $s side affect of medication $d1 |                       |
 &nbsp;endrepeat                                    |                  |                                  |                       |
  
