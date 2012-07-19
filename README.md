@@ -1,7 +1,7 @@
 redcap_preprocess
 =================
 
-Preprocess script for RedCap data dictionaries to support custom types and repeating fields.
+Preprocess script for RedCap(tm) data dictionaries to support custom types and repeating fields.
 
 RedCap is a great tool. It allows anyone to quickly and easily create and share case report forms and surveys. But sometimes to capture common concepts, or multiple instances of a single concept, it requires creating groups of fields with complex branching logic over and over. The preprocess script seeks to solve this problem.
 
