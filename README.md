@@ -240,7 +240,7 @@ med3\_date                | text        | Date 3rd medication taken             
 If a nested repeating group or field is actually the last field of its parent group then add a blank row with the following as Field Name
     <space>endrepeat
         
-For example, in the above example, if you wanted the side affects to be the last thing entered for each medication (rather than the date), it would have to look like this
+For example, in the above example, if you wanted the side affects to be the last thing entered for each medication (rather than the date), it would have to look like this:
 
 Field Name                                         |  Field Type      |  Field Label        | Text Validation Type | Branching Logic
 ---------------------------------------------------|------------------|---------------------|----------------------|-----------------------|----------------
