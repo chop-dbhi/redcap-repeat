@@ -216,7 +216,7 @@ medication${d}\_date endrepeat                      | text             | Date $s
 will become
 
 Field Name                      |  Field Type |  Field Label                                | Text Validation Type  | Text Validation Min| Text Validation Max| Branching Logic
---------------------------------|-------------|--------------------------------------------|------------------------|-----------------------|-----------------|-------------------
+--------------------------------|-------------|--------------------------------------------|------------------------|-----------------------|-----------------|---------------------------------------------|
 medication\_group\_no             | text        | How many medications do you want to enter? |  number                | 0                     |   3             |
 medication1\_name                | text        | 1st medication name                        |                        |                       |                 | [medication\_group\_no] >= 1
 medication1\_sideaffect\_group\_no | text        | How many side affects do you want to enter?|  number                | 0                     |   3             | [medication\_group\_no] >= 1
