@@ -67,7 +67,7 @@ temp\_other | text                |Please specify other affected relative|      
 
 ### Checkbox with details for each option
 
-Similar to checkbox\_other, the checkbox\_details type will create textbox fields that will show for each checkbox selected. It works the exact same way as the checkbox\_other. It works the same way as the checkbox\_other except for creating additionally conditional fields.
+Similar to checkbox\_other, the checkbox\_details type will create textbox fields that will show for each checkbox selected. It works the same way as the checkbox\_other except for creating additionally conditional fields.
 
 ### Radio/Dropdown other and Radio/Dropdown with details
 
