@@ -6,7 +6,7 @@ Preprocess script for RedCap&trade; data dictionaries to support custom types an
 RedCap&trade; is a great tool. It allows anyone to quickly and easily create and share case report forms and surveys. But sometimes to capture common concepts, or multiple instances of a single concept, it requires creating groups of fields with complex branching logic over and over. This preprocess script seeks to solve this problem.
 
 ## Specify commonly used field types in one line
-Instead of manually creating multiple RedCap&trade; fields to capture data for a single discrete value, use a custom type, and let the pre\_process script do all the hard work. Let's see a few examples.
+Instead of manually creating multiple RedCap&trade; fields to capture data for a single discrete value, use a custom type, and let this preprocess script do all the hard work. Let's see a few examples.
 
 ### Minimum and Maximum
 
