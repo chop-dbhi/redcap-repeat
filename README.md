@@ -1,16 +1,16 @@
-redcap_preprocess
+RedCap&trade; Preprocess Script
 =================
 
-Preprocess script for RedCap(tm) data dictionaries to support custom types and repeating fields.
+Preprocess script for RedCap&trade; data dictionaries to support custom types and repeating fields.
 
-RedCap is a great tool. It allows anyone to quickly and easily create and share case report forms and surveys. But sometimes to capture common concepts, or multiple instances of a single concept, it requires creating groups of fields with complex branching logic over and over. The preprocess script seeks to solve this problem.
+RedCap&trade; is a great tool. It allows anyone to quickly and easily create and share case report forms and surveys. But sometimes to capture common concepts, or multiple instances of a single concept, it requires creating groups of fields with complex branching logic over and over. The preprocess script seeks to solve this problem.
 
 ## Specify commonly used field types in one line
-Instead of manually creating multiple RedCap fields to capture data for a single discrete value, use a custom type, and let RedCap pre\_process script do all the hard work. Let's see a few examples.
+Instead of manually creating multiple RedCap&trade; fields to capture data for a single discrete value, use a custom type, and let RedCap pre\_process script do all the hard work. Let's see a few examples.
 
 ### Minimum and Maximum
 
-Instead of created two RedCap number fields to capture a range of numbers, just use the minmax field type. Give the proprocess script this:
+Instead of created two RedCap&trade; number fields to capture a range of numbers, just use the minmax field type. Give the proprocess script this:
 
 Field Name |  Field Type |  Field Label            |Text Validation Type |
 -----------|-------------|-------------------------|---------------------|
@@ -116,7 +116,7 @@ There are two convenience unit types that work the same way as value\_with\_unit
 
 ## Repeating fields
 
-RedCap does not support the ability to specify that a given field repeats a variable number of times. For example, specifyng a list of medications requires creating a number of medicine fields and various complex branching schemes. The preprocess can help.
+RedCap&trade; does not support the ability to specify that a given field repeats a variable number of times. For example, specifyng a list of medications requires creating a number of medicine fields and various complex branching schemes. The preprocess script can help.
 
 ### The Basics
 
@@ -140,7 +140,7 @@ medication3         | text     | Patient medication 3                           
 
 ### Controlling the Field Label
 
-By default, when creating the field label for a repeated field, the preprocessor looks for the <Name of Repeat> in the Field Label and puts a number after it. If that behavior is not what you want, you can control where the number goes by putting $d in the field label. Use $s if you would like the number to be of the style 1st, 2nd, 10th, etc. For example
+By default, when creating the field label for a repeated field, the preprocess script looks for the \<Name of Repeat\> in the Field Label and puts a number after it. If that behavior is not what you want, you can control where the number goes by putting $d in the field label. Use $s if you would like the number to be of the style 1st, 2nd, 10th, etc. For example
 
 Field Name                              |  Field Type      |  Field Label                 | Branching Logic
 ----------------------------------------|------------------|------------------------------|-----------------
