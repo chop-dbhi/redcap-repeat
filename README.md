@@ -12,16 +12,16 @@ Instead of manually creating multiple RedCap fields to capture data for a single
 
 Instead of created two RedCap number fields to capture a range of numbers, just use the minmax field type. Give the proprocess script this:
 
-Field Name |  Field Type |  Field Label            |
------------|-------------|-------------------------|
-temp       | minmax      | Temperature $placheolder| 
+Field Name |  Field Type |  Field Label            |Text Validation Type |
+-----------|-------------|-------------------------|---------------------|
+temp       | minmax      | Temperature $placheolder| number              |
 
 and it will turn it into this:
 
-Field Name  |  Field Type |  Field Label            |
-------------|-------------|-------------------------|
-temp\_minimum| text        |   Temperature minimum   |
-temp\_maximum| text        |   Temperature maximum   |
+Field Name  |  Field Type |  Field Label            |  Text Validation Type |
+------------|-------------|-------------------------|-----------------------|
+temp\_minimum| text        |   Temperature minimum  | number                |
+temp\_maximum| text        |   Temperature maximum  | number                |
 
 All other columns will be preserved just as you would expect. 
 
@@ -43,7 +43,7 @@ relative       | checkbox            | Affected relatives      | 1, Mom &#124;  
 relative\_other | text                | Other Affected relatives|                                      |[relative(3)] = '1'|
 
 #### Controlling the language used in the Field Label for generated fields
-The preprocess script tries to use very generic language for generated Field lLbels. Placing a pipe in the Field Label field followed by something like this
+The preprocess script tries to use very generic language for generated Field Labels. Placing a pipe in the Field Label field followed by something like this
 
 	Please specify $placeholder relative
 	
