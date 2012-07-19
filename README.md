@@ -238,7 +238,8 @@ med3\_sideaffect3         | text        | 3rd side affect for medication 3      
 med3\_date                | text        | Date 3rd medication taken                  |     date               |                       |                 | [med\_group\_no] >= 3               |
 
 If a nested repeating group or field is actually the last field of its parent group then add a blank row with the following as Field Name
-    <space>endrepeat
+    
+    \<space\>endrepeat
         
 For example, in the above example, if you wanted the side affects to be the last thing entered for each medication (rather than the date), it would have to look like this:
 
