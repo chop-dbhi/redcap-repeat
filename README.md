@@ -163,7 +163,7 @@ For example:
 
 Field Name                 |  Field Type      |  Field Label                 | Branching Logic
 ---------------------------|------------------|------------------------------|------------------
-gene{d}\_name repeat 4 Gene | text             | Gene $d name                |
+gene${d}\_name repeat 4 Gene | text             | Gene $d name                |
 
 will become:
 
