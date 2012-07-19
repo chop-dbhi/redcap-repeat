@@ -249,7 +249,7 @@ medication${d}\_date                                | text             | Date $s
 sideaffect repeat 3 Side Affect                    | text             | $s side affect of medication $d1 |                       |
 &nbsp;endrepeat                                    |                  |                                  |                       |
  
-## Branching Logic Details
+## Branching logic details
 
 The preprocess script will try to preserve any branching logic you put in place ahead of time while inserting any necessary additional logic. The intention is that it should work as one would expect. If a situation is encountered where this is not true, please report it.
 
