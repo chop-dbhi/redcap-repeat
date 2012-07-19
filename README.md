@@ -58,7 +58,7 @@ Field Name |  Field Type         |  Field Label            | Choices            
 -----------|---------------------|-------------------------|---------------------------------------|
 temp       | checkbox\_other      | Affected relatives &#124; Please specify $placeholder affected relative| 1, Mom &#124;  2, Dad &#124; 3, Other |
 
-will become
+will become:
 
 Field Name |  Field Type         |  Field Label            | Choices                               |Branching Logic|
 -----------|---------------------|-------------------------|---------------------------------------|---------------|
@@ -101,7 +101,7 @@ Field Name            |  Field Type      |  Field Label                 |
 ----------------------|------------------|------------------------------|
 potassium\_level       | value\_with\_units | Potassium level              |
 
-becomes
+becomes:
 
 Field Name                  |  Field Type      |  Field Label                 | Text Validation Type
 ----------------------------|------------------|------------------------------|---------------------
@@ -129,7 +129,7 @@ Field Name                              |  Field Type      |  Field Label       
 ----------------------------------------|------------------|------------------------------|-----------------
 medication repeat 3 Patient Medication  | text             | Patient medication           |
 
-will become
+will become:
 
 Field Name  |  Field Type      |  Field Label                                          | Text Validation Type | Text Validation Min        | Text Validation Max| Branching Logic
 ------------|------------------|-------------------------------------------------------|----------------------|----------------------------|--------------------|----------------
@@ -146,7 +146,7 @@ Field Name                              |  Field Type      |  Field Label       
 ----------------------------------------|------------------|------------------------------|-----------------
 medication repeat 3 Patient Medication  | text             | $s patient medication        |  
 
-will become
+will become:
 
 Field Name  |  Field Type      |  Field Label                                          | Text Validation Type | Text Validation Min        | Text Validation Max| Branching Logic
 ------------|------------------|-------------------------------------------------------|----------------------|----------------------------|--------------------|----------------
@@ -213,7 +213,7 @@ medication${d}\_name startrepeat 3 Medication       | text             | $s medi
 sideaffect repeat 3 Side Affect                    | text             | $s side affect of medication $d1 |                       |
 medication${d}\_date endrepeat                      | text             | Date $s medication taken         | date                  |
 
-will become
+will become:
 
 Field Name                      |  Field Type |  Field Label                                | Text Validation Type  | Text Validation Min | Text Validation Max| Branching Logic
 --------------------------------|-------------|---------------------------------------------|-----------------------|---------------------|--------------------|---------------------------------------------|
