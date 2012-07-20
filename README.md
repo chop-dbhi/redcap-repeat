@@ -253,7 +253,7 @@ sideaffect repeat 3 Side Affect                    | text             | $s side 
 &nbsp;endrepeat                                    |                  |                                  |                       |
 
 ### Repeating field prompt modes
-By default, the preprocess script will generate a question before each repeating item asking how many you would like to enter and then showing that many instances of the field. There are two other modes controlled by flags on the command prompt. Using -a will cause the preprocess script to automatically show the first instance of the repeating item, and as the first field in each repeating group of fields is filled in, it will show the next repeating field. Using the -p flag will cause the preprocess script to add a checkbox field after each repeating group asking if you would like to enter another.
+By default, the preprocess script will generate a question before each repeating item asking how many you would like to enter and then show that many instances of the field. There are two other modes controlled by flags on the command prompt. Using -a will cause the preprocess script to automatically show the first instance of the repeating item, and as the first field in each repeating group of fields is filled in, it will show the next repeating field. Using the -p flag will cause the preprocess script to add a checkbox field after each repeating group asking if you would like to enter another.
 
 ## Branching logic details
 
