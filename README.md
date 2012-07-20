@@ -120,7 +120,8 @@ RedCap&trade; does not support the ability to specify that a given field repeats
 
 ### The Basics
 
-To specify that a field repeats, use the following in the field name coloumn
+To specify that a field repeats, use the following in the field name column:
+
 \<field\_name\> repeat \<maximum number of times field repeats\> \<Name of Repeat\>
 
 The \<Name of Repeat\> attribute will be used to construct a question asking the user how many times the field repeats. For example
