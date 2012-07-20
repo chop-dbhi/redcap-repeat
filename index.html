@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Redcap preprocess : Preprocess script for RedCap data dictionaries to support custom types and repeating fields" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Redcap preprocess</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/cbmi/redcap_preprocess">View on GitHub</a>
+
+          <h1 id="project_title">Redcap preprocess</h1>
+          <h2 id="project_tagline">Preprocess script for RedCap data dictionaries to support custom types and repeating fields</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/cbmi/redcap_preprocess/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/cbmi/redcap_preprocess/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>RedCap™ preprocess script</h1>
+
+<p>Preprocess script for RedCap™ data dictionaries witten by CBMi to support custom types and repeating fields.</p>
+
+<p>RedCap™ is a great tool. It allows anyone to quickly and easily create and share case report forms and surveys. But sometimes to capture common concepts, or multiple instances of a single concept, you need to create groups of fields with complex branching logic over and over. This preprocess script seeks to solve this problem.</p>
+
+<h2>Specify commonly used field types in one line</h2>
+
+<p>Instead of manually creating multiple RedCap™ fields to capture data for a single discrete value, use a custom type, and let this preprocess script do all the hard work. Let's see a few examples.</p>
+
+<h3>Minimum and Maximum</h3>
+
+<p>Instead of creating two RedCap™ number fields to capture a range of numbers, just use the minmax field type. Give the preprocess script this:</p>
+
+<table>
+<tr>
+<th>Field Name</th>
+<th>Field Type</th>
+<th>Field Label</th>
+<th>Text Validation Type</th>
+</tr>
+<tr>
+<td>temp</td>
+<td>minmax</td>
+<td>Temperature $placeholder</td>
+<td>number</td>
+</tr>
+</table><p>and it will turn it into this:</p>
+
+<table>
+<tr>
+<th>Field Name</th>
+<th>Field Type</th>
+<th>Field Label</th>
+<th>Text Validation Type</th>
+</tr>
+<tr>
+<td>temp_minimum</td>
+<td>text</td>
+<td>Temperature minimum</td>
+<td>number</td>
+</tr>
+<tr>
+<td>temp_maximum</td>
+<td>text</td>
+<td>Temperature maximum</td>
+<td>number</td>
+</tr>
+</table><p>All other columns will be preserved just as you would expect. </p>
+
+<h3>Checkbox with Other</h3>
+
+<p>Specify checkbox_other to automatically create a checkbox field followed by a text field to specify further details. The branching logic to only show the details field when the Other choice is selected will be written for you.</p>
+
+<table>
+<tr>
+<th>Field Name</th>
+<th>Field Type</th>
+<th>Field Label</th>
+<th>Choices</th>
+</tr>
+<tr>
+<td>relative</td>
+<td>checkbox_other</td>
+<td>Affected relatives</td>
+<td>1, Mom |  2, Dad | 3, Other</td>
+</tr>
+</table><p>will become:</p>
+
+<table>
+<tr>
+<th>Field Name</th>
+<th>Field Type</th>
+<th>Field Label</th>
+<th>Choices</th>
+<th>Branching Logic</th>
+</tr>
+<tr>
+<td>relative</td>
+<td>checkbox</td>
+<td>Affected relatives</td>
+<td>1, Mom |  2, Dad | 3, Other</td>
+<td></td>
+</tr>
+<tr>
+<td>relative_other</td>
+<td>text</td>
+<td>Other Affected relatives</td>
+<td></td>
+<td>[relative(3)] = '1'</td>
+</tr>
+</table><h4>Controlling the language used in the Field Label for generated fields</h4>
+
+<p>The preprocess script tries to use very generic language for generated Field Labels. Placing a pipe in the Field Label field followed by something like this</p>
+
+<pre><code>Please specify $placeholder relative
+</code></pre>
+
+<p>will allow you to control the generated Field Label, producing this</p>
+
+<pre><code>Please specify other relative
+</code></pre>
+
+<p>A specific example:</p>
+
+<table>
+<tr>
+<th>Field Name</th>
+<th>Field Type</th>
+<th>Field Label</th>
+<th>Choices</th>
+</tr>
+<tr>
+<td>temp</td>
+<td>checkbox_other</td>
+<td>Affected relatives | Please specify $placeholder affected relative</td>
+<td>1, Mom |  2, Dad | 3, Other</td>
+</tr>
+</table><p>will become:</p>
+
+<table>
+<tr>
+<th>Field Name</th>
+<th>Field Type</th>
+<th>Field Label</th>
+<th>Choices</th>
+<th>Branching Logic</th>
+</tr>
+<tr>
+<td>temp</td>
+<td>checkbox</td>
+<td>Affected relatives</td>
+<td>1, Mom |  2, Dad | 3, Other</td>
+<td></td>
+</tr>
+<tr>
+<td>temp_other</td>
+<td>text</td>
+<td>Please specify other affected relative</td>
+<td></td>
+<td>[temp(3)] = '1'</td>
+</tr>
+</table><h3>Checkbox with details for each option</h3>
+
+<p>Similar to checkbox_other, the checkbox_details type will create textbox fields that will show for each checkbox selected. It works the same way as the checkbox_other except for creating additionally conditional fields.</p>
+
+<h3>Radio/Dropdown other and Radio/Dropdown with details</h3>
+
+<p>There are equivalent custom types for radio and dropdown (radio_other, radio_details, dropdown_other, and dropdown_details) that work exactly the same as the checkbox_other and checkbox_details types.</p>
+
+<h3>Age in weeks and days</h3>
+
+<p>The custom type age_weeks_days will create the two individual week and day fields with the correct range restrictions. This is especially useful for capturing gestational age.</p>
+
+<p>For example:</p>
+
+<table>
+<tr>
+<th>Field Name</th>
+<th>Field Type</th>
+<th>Field Label</th>
+<th>Min Value</th>
+<th>Max Value</th>
+</tr>
+<tr>
+<td>gestational_age</td>
+<td>age_weeks_days</td>
+<td>Gestational age $placeholder</td>
+<td></td>
+<td></td>
+</tr>
+</table><p>becomes:</p>
+
+<table>
+<tr>
+<th>Field Name</th>
+<th>Field Type</th>
+<th>Field Label</th>
+<th>Min Value</th>
+<th>Max Value</th>
+</tr>
+<tr>
+<td>gestational_age_weeks</td>
+<td>text</td>
+<td>Gestational age in weeks</td>
+<td>0</td>
+<td>52</td>
+</tr>
+<tr>
+<td>gestational_age_days</td>
+<td>text</td>
+<td>Gestational age in days</td>
+<td>0</td>
+<td>6</td>
+</tr>
+</table><h3>Age in years and months</h3>
+
+<p>There is a custom field available for age in years and months as well. Specify the type as age_years_months to use it. It works exactly the same as age_weeks_days</p>
+
+<h3>Value with Units</h3>
+
+<p>For a measurement and value that requires units to be specified, use the value_with_units custom type.</p>
+
+<table>
+<tr>
+<th>Field Name</th>
+<th>Field Type</th>
+<th>Field Label</th>
+</tr>
+<tr>
+<td>potassium_level</td>
+<td>value_with_units</td>
+<td>Potassium level</td>
+</tr>
+</table><p>becomes:</p>
+
+<table>
+<tr>
+<th>Field Name</th>
+<th>Field Type</th>
+<th>Field Label</th>
+<th>Text Validation Type</th>
+</tr>
+<tr>
+<td>potassium_level</td>
+<td>text</td>
+<td>Potassium level</td>
+<td>number</td>
+</tr>
+<tr>
+<td>potassium_level_units</td>
+<td>text</td>
+<td>Potassium level units</td>
+<td></td>
+</tr>
+</table><h4>Convenience unit types</h4>
+
+<p>There are two convenience unit types that work the same way as value_with_unit, but instead of a free text input for units, provide a dropdown with specific choices. These are</p>
+
+<ul>
+<li>weight_value_with_units</li>
+<li>height_value_with_units</li>
+</ul><h2>Repeating fields</h2>
+
+<p>RedCap™ does not support the ability to specify that a given field repeats a variable number of times. For example, specifyng a list of medications requires creating a number of medicine fields and various complex branching schemes. The preprocess script can help.</p>
+
+<h3>The Basics</h3>
+
+<p>To specify that a field repeats, use the following in the field name column:</p>
+
+<p>&lt;field_name&gt; repeat &lt;maximum number of times field repeats&gt; &lt;Name of Repeat&gt;</p>
+
+<p>The &lt;Name of Repeat&gt; attribute will be used to construct a question asking the user how many times the field repeats. For example</p>
+
+<table>
+<tr>
+<th>Field Name</th>
+<th>Field Type</th>
+<th>Field Label</th>
+<th>Branching Logic</th>
+</tr>
+<tr>
+<td>medication repeat 3 Patient Medication</td>
+<td>text</td>
+<td>Patient medication</td>
+<td></td>
+</tr>
+</table><p>will become:</p>
+
+<table>
+<tr>
+<th>Field Name</th>
+<th>Field Type</th>
+<th>Field Label</th>
+<th>Text Validation Type</th>
+<th>Text Validation Min</th>
+<th>Text Validation Max</th>
+<th>Branching Logic</th>
+</tr>
+<tr>
+<td>medication_group_no</td>
+<td>text</td>
+<td>How many patient medications would you like to enter?</td>
+<td>number</td>
+<td>0</td>
+<td>3</td>
+<td></td>
+</tr>
+<tr>
+<td>medication1</td>
+<td>text</td>
+<td>Patient medication 1</td>
+<td></td>
+<td></td>
+<td></td>
+<td>[medication_group_no] &gt;= 1</td>
+</tr>
+<tr>
+<td>medication2</td>
+<td>text</td>
+<td>Patient medication 2</td>
+<td></td>
+<td></td>
+<td></td>
+<td>[medication_group_no] &gt;= 2</td>
+</tr>
+<tr>
+<td>medication3</td>
+<td>text</td>
+<td>Patient medication 3</td>
+<td></td>
+<td></td>
+<td></td>
+<td>[medication_group_no] &gt;= 3</td>
+</tr>
+</table><h3>Controlling the Field Label</h3>
+
+<p>By default, when creating the field label for a repeated field, the preprocess script looks for the &lt;Name of Repeat&gt; in the Field Label and puts a number after it. If that behavior is not what you want, you can control where the number goes by putting $d in the field label. Use $s if you would like the number to be of the style 1st, 2nd, 10th, etc. For example</p>
+
+<table>
+<tr>
+<th>Field Name</th>
+<th>Field Type</th>
+<th>Field Label</th>
+<th>Branching Logic</th>
+</tr>
+<tr>
+<td>medication repeat 3 Patient Medication</td>
+<td>text</td>
+<td>$s patient medication</td>
+<td></td>
+</tr>
+</table><p>will become:</p>
+
+<table>
+<tr>
+<th>Field Name</th>
+<th>Field Type</th>
+<th>Field Label</th>
+<th>Text Validation Type</th>
+<th>Text Validation Min</th>
+<th>Text Validation Max</th>
+<th>Branching Logic</th>
+</tr>
+<tr>
+<td>medication_group_no</td>
+<td>text</td>
+<td>How many patient medications would you like to enter?</td>
+<td>number</td>
+<td>0</td>
+<td>3</td>
+<td></td>
+</tr>
+<tr>
+<td>medication1</td>
+<td>text</td>
+<td>1st patient medication</td>
+<td></td>
+<td></td>
+<td></td>
+<td>[medication_group_no] &gt;= 1</td>
+</tr>
+<tr>
+<td>medication2</td>
+<td>text</td>
+<td>2nd patient medication</td>
+<td></td>
+<td></td>
+<td></td>
+<td>[medication_group_no] &gt;= 2</td>
+</tr>
+<tr>
+<td>medication3</td>
+<td>text</td>
+<td>3rd Patient medication</td>
+<td></td>
+<td></td>
+<td></td>
+<td>[medication_group_no] &gt;= 3</td>
+</tr>
+</table><h3>Controlling the Field Name</h3>
+
+<p>By default, the generated Field Names for repeated groups just place a number at the end. If you would like the number to go elsewhere, put ${d} anywhere in the Field Label.</p>
+
+<p>For example:</p>
+
+<table>
+<tr>
+<th>Field Name</th>
+<th>Field Type</th>
+<th>Field Label</th>
+<th>Branching Logic</th>
+</tr>
+<tr>
+<td>gene${d}_name repeat 4 Gene</td>
+<td>text</td>
+<td>Gene $d name</td>
+<td></td>
+</tr>
+</table><p>will become:</p>
+
+<table>
+<tr>
+<th>Field Name</th>
+<th>Field Type</th>
+<th>Field Label</th>
+<th>Text Validation Type</th>
+<th>Text Validation Min</th>
+<th>Text Validation Max</th>
+<th>Branching Logic</th>
+</tr>
+<tr>
+<td>gene_group_no</td>
+<td>text</td>
+<td>How many genes do you want to enter?</td>
+<td>number</td>
+<td>0</td>
+<td>4</td>
+<td></td>
+</tr>
+<tr>
+<td>gene1_name</td>
+<td>text</td>
+<td>Gene 1 name</td>
+<td></td>
+<td></td>
+<td></td>
+<td>[gene_group_no] &gt;= 1</td>
+</tr>
+<tr>
+<td>gene2_name</td>
+<td>text</td>
+<td>Gene 2 name</td>
+<td></td>
+<td></td>
+<td></td>
+<td>[gene_group_no] &gt;= 2</td>
+</tr>
+<tr>
+<td>gene3_name</td>
+<td>text</td>
+<td>Gene 3 name</td>
+<td></td>
+<td></td>
+<td></td>
+<td>[gene_group_no] &gt;= 3</td>
+</tr>
+<tr>
+<td>gene4_name</td>
+<td>text</td>
+<td>Gene 4 name</td>
+<td></td>
+<td></td>
+<td></td>
+<td>[gene_group_no] &gt;= 4</td>
+</tr>
+</table><h3>Repeating groups of fields</h3>
+
+<p>Sometimes you want a group of fields to repeat instead of just a single field. For example, you might be trying date and result of a series of hand xrays. To do this, follow the same rules for single field repeats except change "repeat" to "startrepeat" and terminate the repeating group by putting "endrepeat" after the Field Label of the last field in the group.
+For example:</p>
+
+<table>
+<tr>
+<th>Field Name</th>
+<th>Field Type</th>
+<th>Field Label</th>
+<th>Choices</th>
+<th>Text Validation Type</th>
+<th>Branching Logic</th>
+</tr>
+<tr>
+<td>xray_date startrepeat 3 xray</td>
+<td>text</td>
+<td>$s xray data</td>
+<td></td>
+<td>date</td>
+<td></td>
+</tr>
+<tr>
+<td>xray_hand</td>
+<td>radio</td>
+<td>$s xray hand</td>
+<td>1, Right | 2, Left</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>xray_result endrepeat</td>
+<td>notes</td>
+<td>Result of $s xray</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</table><p>will become:</p>
+
+<table>
+<tr>
+<th>Field Name</th>
+<th>Field Type</th>
+<th>Field Label</th>
+<th>Choices</th>
+<th>Text Validation Type</th>
+<th>Text Validation Min</th>
+<th>Text Validation Max</th>
+<th>Branching Logic</th>
+</tr>
+<tr>
+<td>xray_group_no</td>
+<td>text</td>
+<td>How many xrays do you want to enter?</td>
+<td></td>
+<td>number</td>
+<td>0</td>
+<td>3</td>
+<td></td>
+</tr>
+<tr>
+<td>xray_date1</td>
+<td>text</td>
+<td>1st xray date</td>
+<td></td>
+<td>date</td>
+<td></td>
+<td></td>
+<td>[xray_group_no] &gt;= 1</td>
+</tr>
+<tr>
+<td>xray_hand1</td>
+<td>radio</td>
+<td>1st xray hand</td>
+<td>1, Right | 2, Left</td>
+<td></td>
+<td></td>
+<td></td>
+<td>[xray_group_no] &gt;= 1</td>
+</tr>
+<tr>
+<td>xray_result1</td>
+<td>notes</td>
+<td>Result of 1st xray</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>[xray_group_no] &gt;= 1</td>
+</tr>
+<tr>
+<td>xray_date2</td>
+<td>text</td>
+<td>2nd xray date</td>
+<td></td>
+<td>date</td>
+<td></td>
+<td></td>
+<td>[xray_group_no] &gt;= 2</td>
+</tr>
+<tr>
+<td>xray_hand2</td>
+<td>radio</td>
+<td>2nd xray hand</td>
+<td>1, Right | 2, Left</td>
+<td></td>
+<td></td>
+<td></td>
+<td>[xray_group_no] &gt;= 2</td>
+</tr>
+<tr>
+<td>xray_result2</td>
+<td>notes</td>
+<td>Result of 2nd xray</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>[xray_group_no] &gt;= 2</td>
+</tr>
+<tr>
+<td>xray_date3</td>
+<td>text</td>
+<td>3rd xray date</td>
+<td></td>
+<td>date</td>
+<td></td>
+<td></td>
+<td>[xray_group_no] &gt;= 3</td>
+</tr>
+<tr>
+<td>xray_hand3</td>
+<td>radio</td>
+<td>3rd xray hand</td>
+<td>1, Right | 2, Left</td>
+<td></td>
+<td></td>
+<td></td>
+<td>[xray_group_no] &gt;= 3</td>
+</tr>
+<tr>
+<td>xray_result3</td>
+<td>notes</td>
+<td>Result of 3rd xray</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>[xray_group_no] &gt;= 3</td>
+</tr>
+</table><h3>Nesting groups of repeating fields</h3>
+
+<p>Sometimes a single group of repeating fields may not be enough. For example, you might be trying to capture a list of medications, each with a list of side affects. To accomplish this you can nest startrepeat-endrepeat groups or single repeat fields inside of other startrepeat-endrepeat groups. The behavior should be just as you would expect. The only additional functionality is that you can use $s1 or $d1 in Field Labels to refer to the iteration of outer groups. For example, $s will always refer to the current (innermost) group, and $1 will always refer to the outermost group. If you had 2 nested groups, $1 would refer to the iteration of the outermost group, $2 would refer to the iteration of the middle group, and $s would still refer to the iteration of the innermost group. Examples should clear this up.</p>
+
+<table>
+<tr>
+<th>Field Name</th>
+<th>Field Type</th>
+<th>Field Label</th>
+<th>Text Validation Type</th>
+<th>Branching Logic</th>
+</tr>
+<tr>
+<td>medication${d}_name startrepeat 3 Medication</td>
+<td>text</td>
+<td>$s medication name</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>sideaffect repeat 3 Side Affect</td>
+<td>text</td>
+<td>$s side affect of medication $d1</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>medication${d}_date endrepeat</td>
+<td>text</td>
+<td>Date $s medication taken</td>
+<td>date</td>
+<td></td>
+</tr>
+</table><p>will become:</p>
+
+<table>
+<tr>
+<th>Field Name</th>
+<th>Field Type</th>
+<th>Field Label</th>
+<th>Text Validation Type</th>
+<th>Text Validation Min</th>
+<th>Text Validation Max</th>
+<th>Branching Logic</th>
+</tr>
+<tr>
+<td>med_group_no</td>
+<td>text</td>
+<td>How many medications do you want to enter?</td>
+<td>number</td>
+<td>0</td>
+<td>3</td>
+<td></td>
+</tr>
+<tr>
+<td>med1_name</td>
+<td>text</td>
+<td>1st medication name</td>
+<td></td>
+<td></td>
+<td></td>
+<td>[med_group_no] &gt;= 1</td>
+</tr>
+<tr>
+<td>med1_sideaffect_group_no</td>
+<td>text</td>
+<td>How many side affects do you want to enter?</td>
+<td>number</td>
+<td>0</td>
+<td>3</td>
+<td>[med_group_no] &gt;= 1</td>
+</tr>
+<tr>
+<td>med1_sideaffect1</td>
+<td>text</td>
+<td>1st side affect for medication 1</td>
+<td></td>
+<td></td>
+<td></td>
+<td>[med1_sideaffect_group_no] &gt;= 1</td>
+</tr>
+<tr>
+<td>med1_sideaffect2</td>
+<td>text</td>
+<td>2nd side affect for medication 1</td>
+<td></td>
+<td></td>
+<td></td>
+<td>[med1_sideaffect_group_no] &gt;= 2</td>
+</tr>
+<tr>
+<td>med1_sideaffect3</td>
+<td>text</td>
+<td>3rd side affect for medication 1</td>
+<td></td>
+<td></td>
+<td></td>
+<td>[med1_sideaffect_group_no] &gt;= 3</td>
+</tr>
+<tr>
+<td>med1_date</td>
+<td>text</td>
+<td>Date 1st medication taken</td>
+<td>date</td>
+<td></td>
+<td></td>
+<td>[med_group_no] &gt;= 1</td>
+</tr>
+<tr>
+<td>med2_name</td>
+<td>text</td>
+<td>2nd medication name</td>
+<td></td>
+<td></td>
+<td></td>
+<td>[med_group_no] &gt;= 2</td>
+</tr>
+<tr>
+<td>med2_sideaffect_group_no</td>
+<td>text</td>
+<td>How many side affects do you want to enter?</td>
+<td>number</td>
+<td>0</td>
+<td>3</td>
+<td>[med_group_no] &gt;= 2</td>
+</tr>
+<tr>
+<td>med2_sideaffect1</td>
+<td>text</td>
+<td>1st side affect for medication 2</td>
+<td></td>
+<td></td>
+<td></td>
+<td>[med2_sideaffect_group_no] &gt;= 1</td>
+</tr>
+<tr>
+<td>med2_sideaffect2</td>
+<td>text</td>
+<td>2nd side affect for medication 2</td>
+<td></td>
+<td></td>
+<td></td>
+<td>[med2_sideaffect_group_no] &gt;= 2</td>
+</tr>
+<tr>
+<td>med2_sideaffect3</td>
+<td>text</td>
+<td>3rd side affect for medication 2</td>
+<td></td>
+<td></td>
+<td></td>
+<td>[med2_sideaffect_group_no] &gt;= 3</td>
+</tr>
+<tr>
+<td>med2_date</td>
+<td>text</td>
+<td>Date 2nd medication taken</td>
+<td>date</td>
+<td></td>
+<td></td>
+<td>[med_group_no] &gt;= 2</td>
+</tr>
+<tr>
+<td>med3_name</td>
+<td>text</td>
+<td>3rd medication name</td>
+<td></td>
+<td></td>
+<td></td>
+<td>[med_group_no] &gt;= 3</td>
+</tr>
+<tr>
+<td>med3_sideaffect_group_no</td>
+<td>text</td>
+<td>How many side affects do you want to enter?</td>
+<td>number</td>
+<td>0</td>
+<td>3</td>
+<td>[med_group_no] &gt;= 3</td>
+</tr>
+<tr>
+<td>med3_sideaffect1</td>
+<td>text</td>
+<td>1st side affect for medication 3</td>
+<td></td>
+<td></td>
+<td></td>
+<td>[med3_sideaffect_group_no] &gt;= 1</td>
+</tr>
+<tr>
+<td>med3_sideaffect2</td>
+<td>text</td>
+<td>2nd side affect for medication 3</td>
+<td></td>
+<td></td>
+<td></td>
+<td>[med3_sideaffect_group_no] &gt;= 2</td>
+</tr>
+<tr>
+<td>med3_sideaffect3</td>
+<td>text</td>
+<td>3rd side affect for medication 3</td>
+<td></td>
+<td></td>
+<td></td>
+<td>[med3_sideaffect_group_no] &gt;= 3</td>
+</tr>
+<tr>
+<td>med3_date</td>
+<td>text</td>
+<td>Date 3rd medication taken</td>
+<td>date</td>
+<td></td>
+<td></td>
+<td>[med_group_no] &gt;= 3</td>
+</tr>
+</table><p>If a nested repeating group or field is actually the last field of its parent group then add a blank row with the following as Field Name (note the leading space):</p>
+
+<p>" endrepeat"</p>
+
+<p>For example, in the above example, if you wanted the side affects to be the last thing entered for each medication (rather than the date), it would have to look like this:</p>
+
+<table>
+<tr>
+<th>Field Name</th>
+<th>Field Type</th>
+<th>Field Label</th>
+<th>Text Validation Type</th>
+<th>Branching Logic</th>
+</tr>
+<tr>
+<td>medication${d}_name startrepeat 3 Medication</td>
+<td>text</td>
+<td>$s medication name</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>medication${d}_date</td>
+<td>text</td>
+<td>Date $s medication taken</td>
+<td>date</td>
+<td></td>
+</tr>
+<tr>
+<td>sideaffect repeat 3 Side Affect</td>
+<td>text</td>
+<td>$s side affect of medication $d1</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td> endrepeat</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</table><h3>Repeating field prompt modes</h3>
+
+<p>By default, the preprocess script will generate a question before each repeating item asking how many you would like to enter and then show that many instances of the field. There are two other modes controlled by flags on the command prompt. Using -a will cause the preprocess script to automatically show the first instance of the repeating item, and as the first field in each repeating group of fields is filled in, it will show the next repeating field. Using the -p flag will cause the preprocess script to add a checkbox field after each repeating group asking if you would like to enter another.</p>
+
+<h2>Branching logic details</h2>
+
+<p>The preprocess script will try to preserve any branching logic you put in place ahead of time while inserting any necessary additional logic. The intention is that it should work as one would expect. If a situation is encountered where this is not true, please report it.</p>
+
+<h2>Custom fields within repeating fields/groups</h2>
+
+<p>Custom field types should work seamlessly with repeating fields and should not require any additional work. If any bugs are encountered, please report them.</p>
+
+<h2>Caveats</h2>
+
+<p>This is beta software. It has been used internally for one complex project but there are sure to be unexpected edge cases. Please make sure to backup any data dictionary files you run through the preprocess script. This has not been tested on longitudinal projects (so events are not tested, although it may work), calculated fields, or project arms. There should be no techinical boundaries to implementing these features.</p>
+
+<h2>Usage</h2>
+
+<p>The preprocess script is written in python. It has no required external dependencies, but you may want to install the python inflector package which will help properly pluralize repeating item names in generated questions. To install the inflector, issue the following from the command prompt:</p>
+
+<pre><code>pip install inflector
+</code></pre>
+
+<p>To execute the preprocess script, call it from the command prompt as follows:</p>
+
+<pre><code>python redcap_preprocess.py "name of input file" "name of output file"
+</code></pre>
+
+<p>Use the -h flag to see a description of available options.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Redcap preprocess maintained by <a href="https://github.com/cbmi">cbmi</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
