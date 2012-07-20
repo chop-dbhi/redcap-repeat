@@ -268,7 +268,11 @@ This has not been tested on longitudinal projects (so events are not tested, alt
 
 
 ## Usage
-The preprocess script is a python script. To use it, call the script from the command prompt as follows:
+The preprocess script is written in python. It has no required external dependencies, but you may want to install the python inflector package which will help properly pluralize repeating item names in generated questions. To install the inflector, issue the following from the command prompt:
+	
+	pip install inflector
+	
+To execute the preprocess script, call it from the command prompt as follows:
 
 	python redcap_preprocess.py "name of input file" "name of output file"
 	
