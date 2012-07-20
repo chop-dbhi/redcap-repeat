@@ -47,6 +47,12 @@ template = []
 for x in range(0,12):
     template.append("")
 
+def numberEnding(iteration):
+    if iteration % 100 > 10 and iteration % 100 < 20:
+        return "th"
+    else:
+        return number_map[iteration % 10]
+
 def extract(cell, regex):
      match = regex.match(cell)
      if match:
@@ -424,9 +430,9 @@ def repeat_group(group, path=[], ids={}, depth=0, iterations=[], parent_group=[]
              template_map = {}
              for d in range(0, depth-1):
                  template_map["d"+str(d+1)]=iterations[d] 
-                 template_map["s"+str(d+1)]=str(iterations[d])+number_map[iterations[d]%10]
+                 template_map["s"+str(d+1)]=str(iterations[d])+numberEnding(iterations[d])
              template_map['d'] = iteration
-             template_map['s'] = str(iteration)+number_map[iteration % 10]
+             template_map['s'] = str(iteration)+numberEnding(iteration)
              new_line[key['e']] = Template(prompt).safe_substitute(**template_map)
              #If everything failed, try to replace the group name with group name #
              
