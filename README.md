@@ -252,8 +252,9 @@ medication${d}\_date                                | text             | Date $s
 sideaffect repeat 3 Side Affect                    | text             | $s side affect of medication $d1 |                       |
 &nbsp;endrepeat                                    |                  |                                  |                       |
 
-## Repeating field prompt modes
-By default, the preprocess script will generate a question before each repeating item asking how many you would like to enter and then showing that many instances of the field. There are two other modes controlled by flags on the command prompt. Using -a will cause the process script to automatically show the first instance of the repeating item, and as the first field in each repeating group of fields is filled in, it will show the next repeating field. Using the -p flag will cause the preprocess script to add a checkbox field after each repeating group asking if you would like to enter another.
+### Repeating field prompt modes
+By default, the preprocess script will generate a question before each repeating item asking how many you would like to enter and then showing that many instances of the field. There are two other modes controlled by flags on the command prompt. Using -a will cause the preprocess script to automatically show the first instance of the repeating item, and as the first field in each repeating group of fields is filled in, it will show the next repeating field. Using the -p flag will cause the preprocess script to add a checkbox field after each repeating group asking if you would like to enter another.
+
 ## Branching logic details
 
 The preprocess script will try to preserve any branching logic you put in place ahead of time while inserting any necessary additional logic. The intention is that it should work as one would expect. If a situation is encountered where this is not true, please report it.
@@ -264,4 +265,12 @@ Custom field types should work seamlessly with repeating fields and should not r
 ## Caveats
  
 This has not been tested on longitudinal projects (so events are not tested, although it may work), calculated fields, or project arms. There is nothing preventing these from being supported, but as of now it has not been worked on.
+
+
+## Usage
+The preprocess script is a python script. To use it, call the script from the command prompt as follows:
+
+	python redcap_preprocess.py "name of input file" "name of output file"
+	
+Use the -h flag to see a description of available options.
 
