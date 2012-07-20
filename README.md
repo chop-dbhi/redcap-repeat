@@ -1,4 +1,4 @@
-RedCap&trade; preprocess Script
+RedCap&trade; preprocess script
 =================
 
 Preprocess script for RedCap&trade; data dictionaries witten by CBMi to support custom types and repeating fields.
