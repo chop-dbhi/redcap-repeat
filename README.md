@@ -264,7 +264,7 @@ Custom field types should work seamlessly with repeating fields and should not r
 
 ## Caveats
  
-This has not been tested on longitudinal projects (so events are not tested, although it may work), calculated fields, or project arms. There is nothing preventing these from being supported, but as of now it has not been worked on.
+This is beta software. It has been used internally for one complex project but there are sure to be unexpected edge cases. Please make sure to backup any data dictionary files you run through the preprocess script. This has not been tested on longitudinal projects (so events are not tested, although it may work), calculated fields, or project arms. There should be no techinical boundaries to implementing these features.
 
 
 ## Usage
