@@ -179,7 +179,7 @@ gene4\_name    | text        | Gene 4 name                          |           
 
 ### Repeating groups of fields
 
-Sometimes you want a group of fields to repeat instead of just a single field. For example, you might be trying date and result of a series of hand xrays. To do this, follow the same rules for single field repeats except change "repeat" to "startrepeat" and terminate the repeating group by putting "endrepeat" after the Field Label of the last field in the group.
+Sometimes you want a group of fields to repeat instead of just a single field. For example, you might be trying to capture date and result of a series of hand xrays. To do this, follow the same rules for single field repeats except change "repeat" to "startrepeat" and terminate the repeating group by putting "endrepeat" after the Field Label of the last field in the group.
 For example:
 
 Field Name                      |  Field Type      |  Field Label        | Choices                | Text Validation Type | Branching Logic
