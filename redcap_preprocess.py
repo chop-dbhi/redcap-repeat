@@ -143,7 +143,6 @@ def minmax(line, minimum="minimum", maximum="maximum"):
 
 
 def details(line, kind = "checkbox", detail_kind = "text", details = None ):
-
     choices = line[key['f']].split(" | ")
     choices = [x.split(",") for x in choices]
     choices = [(x[0].strip(), x[1].strip()) for x in choices]
@@ -190,26 +189,51 @@ def details(line, kind = "checkbox", detail_kind = "text", details = None ):
 def value_units(line, kind = "dropdown", units = []):
     units_line = line[:]
     value_line = line[:]
+    weight = False
+    if "kg" in units:
+        weight = True
+    # If this is used to weight units and the user enters lb, we also need to collect ounces
+    oz_line = line[:]
+
     value_line[key['c']] = ''
 
     units_line[key['a']] = preserve_metadata("begin", "_units",  units_line[key['a']])
-    value_line[key['a']] = preserve_metadata("end", "", value_line[key['a']])
+    if not weight:
+        value_line[key['a']] = preserve_metadata("end", "", value_line[key['a']])
+    else:
+        value_line[key['a']] = preserve_metadata("middle", "", value_line[key['a']])
+        oz_line[key['a']] =  preserve_metadata("end", "_oz", value_line[key['a']])
 
     units_line[key['d']] = kind
     value_line[key['d']] = "text"
+    oz_line[key['d']] = "text"
 
     units_line[key['h']] = ""
+    oz_line[key['h']] = ""
 
     value_line[key['e']] = Template(value_line[key['e']]).safe_substitute(placeholder="").strip()
     units_line[key['e']] = Template(units_line[key['e']]).safe_substitute(placeholder="").strip()
+    oz_line[key['e']] = Template(oz_line[key['e']]).safe_substitute(placeholder="").strip()
 
     units_line[key['e']] = "%s units" % units_line[key['e']]
+    oz_line[key['e']] = "%s ounces" % oz_line[key['e']]
+
+    if weight:
+        if len(value_line[key['g']].strip()):
+            value_line[key['g']] = "%s (%s)" % (value_line[key['g']], "If units are lbs, specify ounces below")
+        else:
+            value_line[key['g']] = "If units are lbs, specify ounces below"
+
+    # Only show oz when lbs are the units
+    oz_line[key['l']] = "[%s] = '1'" % units_line[key['a']]
+    oz_line[key['g']] = ""
+
     if len(units):
        units_line[key['f']] = " | ".join(["%d, %s" % x for x in enumerate(units)])
 
     units_line[key['g']] = ""
 
-    return [units_line, value_line]
+    return [units_line, value_line] if not weight else [units_line, value_line, oz_line]
 
 def age_weeks_days(line):
     weeks_line = line[:]
@@ -326,7 +350,6 @@ def repeat_group(group, path=[], ids={}, depth=0, iterations=[], parent_group=[]
         if match and match.group(0) == " endrepeat":
             group = group[:-1]
             last = group[-1]
-
     new_rows = []
     show_instance = None
     match = begin.match(first[key['a']])
@@ -388,8 +411,11 @@ def repeat_group(group, path=[], ids={}, depth=0, iterations=[], parent_group=[]
                  plural_name = pluralize(plural_name)
             
             number_line[key['e']] = "How many %s would you like to enter?" % plural_name
+            number_line[key['c']] = Template(first[key['c']]).safe_substitute(placeholder = plural_name)
         else:
             number_line[key['e']] = "How many %s %s would you like to enter?" % (name.lower() if not name.isupper() else name, options.groups)
+            number_line[key['c']] = Template(first[key['c']]).safe_substitute(placeholder = "%s %s" % (name.lower() if not name.isupper() else name, options.groups))
+
 
         number_line[key['h']] = "integer"
         number_line[key['i']] = "0"
@@ -416,6 +442,28 @@ def repeat_group(group, path=[], ids={}, depth=0, iterations=[], parent_group=[]
              if skip:
                  skip = skip - 1 
                  continue
+
+             # Section headers
+             if not (options.auto or options.prompt) and not show_instance and index == 0 and iteration == 1:
+                 if not options.groups: #TODO REFACTOR
+                     plural_name = name
+                     plural_match = paren_re.match(plural_name)
+
+                     if plurals.has_key(name.lower()):
+                          plural_name = plurals[name.lower()]
+                     elif plural_match:
+                         plural_name = plural_match.group(1).strip()
+                         plural_name = plural_name.lower() if not plural_name.isupper() else plural_name
+                         plural_name = pluralize(plural_name)
+                         plural_name = plural_name + " " + plural_match.group(2)
+                     else:
+                          plural_name = plural_name.lower() if not plural_name.isupper() else plural_name
+                          plural_name = pluralize(plural_name)
+                     line[key['c']] = Template(line[key['c']]).safe_substitute(placeholder = plural_name)
+                 else:
+                     line[key['c']] = Template(line[key['c']]).safe_substitute(placeholder = "%s %s" % (name.lower() if not name.isupper() else name, options.groups))
+             else:
+                line[key['c']] = ""
 
              startmatch = begin.match(line[key['a']])
              if index >= 1 and startmatch:
