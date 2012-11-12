@@ -270,7 +270,7 @@ This is beta software. It has been used internally for one complex project but t
 ## Usage
 The preprocess script is written in python. It has no required external dependencies, but you may want to install the python inflector package which will help properly pluralize repeating item names in generated questions. To install the inflector, issue the following from the command prompt:
 	
-	pip install inflector
+	easy_install inflector
 	
 To execute the preprocess script, call it from the command prompt as follows:
 
