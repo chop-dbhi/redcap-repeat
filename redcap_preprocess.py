@@ -422,7 +422,8 @@ def repeat_group(group, path=[], ids={}, depth=0, iterations=[], parent_group=[]
         number_line[key['j']] = times
         logic = first[key['l']]
         if len(logic.strip()):
-           for id_pair in ids.items():
+           for pairs in ids.items():
+                id_pair = pairs[1]
                 logic = re.sub(id_pair[0],id_pair[1],logic)
         if len(pre_logic):
             logic = "(%s) and [%s]>=%d"%(logic, pre_logic, iterations[depth-2])
@@ -437,7 +438,7 @@ def repeat_group(group, path=[], ids={}, depth=0, iterations=[], parent_group=[]
         skip = 0
         # We need to find all the possible keys that might need replacing this time around
         group_ids = [line[key['a']].split(" ")[0] for line in group]
-        ids.update(dict([(re.compile("\[%s(?=(]|\())"% re.escape(cell)), Template("["+prefix+cell).safe_substitute(d=iteration) if "${d}" in cell else "[%s%s%d" % (prefix, cell, iteration)) for cell in group_ids]))
+        ids.update(dict([("\[%s(?=(]|\())" % re.escape(cell),(re.compile("\[%s(?=(]|\())"% re.escape(cell)), Template("["+prefix+cell).safe_substitute(d=iteration) if "${d}" in cell else "[%s%s%d" % (prefix, cell, iteration))) for cell in group_ids]))
         for index, line in enumerate(group):
              if skip:
                  skip = skip - 1 
@@ -512,9 +513,9 @@ def repeat_group(group, path=[], ids={}, depth=0, iterations=[], parent_group=[]
 
              # Subsitute in proper var names
              if len(logic.strip()):
-                for id_pair in ids.items():
+                for pairs in ids.items():
+                     id_pair = pairs[1]
                      logic = re.sub(id_pair[0],id_pair[1],logic)
-
              # Use the correct scheme for generating the next visible one
              if (options.auto or options.prompt) and not show_instance: 
                  if another_branch:
