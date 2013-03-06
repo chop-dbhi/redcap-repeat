@@ -60,11 +60,11 @@ other_id_with_num_re = re.compile(r'\[([a-z_0-9]*)\](\d+)')
 
 paren_re = re.compile(r'([a-zA-Z0-9 ]*)(\([a-zA-Z0-9 ]*\))')
 
-key = {'a':0,'b':1,'c':2,'d':3,'e':4,'f':5,'g':6,'h':7,'i':8,'j':9,'k':10,'l':11,'m':12}
+key = {'a':0,'b':1,'c':2,'d':3,'e':4,'f':5,'g':6,'h':7,'i':8,'j':9,'k':10,'l':11,'m':12, 'p':15}
 number_map = {0:"th", 1:"st", 2:"nd", 3:"rd", 4:"th", 5:"th", 6:"th", 7:"th", 8:"th", 9:"th"}
 
 template = []
-for x in range(0,12):
+for x in range(0,15):
     template.append("")
 
 def numberEnding(iteration):
@@ -425,8 +425,10 @@ def repeat_group(group, path=[], ids={}, depth=0, iterations=[], parent_group=[]
            for pairs in ids.items():
                 id_pair = pairs[1]
                 logic = re.sub(id_pair[0],id_pair[1],logic)
-        if len(pre_logic):
+        if len(pre_logic) and len(logic.strip()):
             logic = "(%s) and [%s]>=%d"%(logic, pre_logic, iterations[depth-2])
+        elif len(pre_logic):
+            logic = "[%s]>=%d"%(pre_logic, iterations[depth-2])
 
 
         pre_logic = number_line[key['a']]
@@ -530,6 +532,11 @@ def repeat_group(group, path=[], ids={}, depth=0, iterations=[], parent_group=[]
                      new_line[key['l']] = "(%s) and %s" % (logic, "[%s]>=%d" % (show_instance, iteration))
                  else:
                      new_line[key['l']] = "[%s]>=%d" % (show_instance, iteration)
+             
+             # Support for matrix group name
+             if new_line[key['p']].strip():
+                 new_line[key['p']] = "%s%s%d" % (prefix, new_line[key['p']],iteration) 
+
              new_rows.append(new_line)
         # If using prompt or auto scheme, generate the logic to use for the next group 
         # If show_instance is defined but one of these is also true, it means this
