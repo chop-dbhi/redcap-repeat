@@ -595,7 +595,7 @@ def main(input_file, output_file):
 
     temp_file = os.tmpfile() 
 
-    handle_in = open(input_file, 'rb')
+    handle_in = open(input_file, 'rU')
     handle_out = open(output_file, 'wb')
 
     input_f = csv.reader(handle_in)
