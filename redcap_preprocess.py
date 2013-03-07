@@ -143,7 +143,7 @@ def minmax(line, minimum="minimum", maximum="maximum"):
 
 
 def details(line, kind = "checkbox", detail_kind = "text", details = None ):
-    choices = line[key['f']].split(" | ")
+    choices = line[key['f']].split("|")
     choices = [x.split(",") for x in choices]
     choices = [(x[0].strip(), x[1].strip()) for x in choices]
     
@@ -181,6 +181,10 @@ def details(line, kind = "checkbox", detail_kind = "text", details = None ):
            # Don't repeat section headings
            other_line[key['c']] = ""
            new_lines.append(other_line)
+    if last_detail == None:
+        sys.stderr.write("Error: For record '%s', since the datatype is of type '*_other' you must specify an 'other'"
+                " choice, chosen from one of the following values: %s \n" % (line[key['a']], details))
+        sys.exit()
     # Go back and fix the last one
     new_lines[-1][key['a']] = preserve_metadata("end", "_%s_dtls" % clean(last_detail), line[key['a']])
 
