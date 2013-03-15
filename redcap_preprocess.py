@@ -414,16 +414,17 @@ def repeat_group(group, path=[], ids={}, depth=0, iterations=[], parent_group=[]
                  plural_name = plural_name.lower() if not plural_name.isupper() else plural_name
                  plural_name = pluralize(plural_name)
             
-            number_line[key['e']] = "How many %s would you like to enter?" % plural_name
+            number_line[key['e']] = "How many %s would you like to enter(maximum of %d)?" % (plural_name, times)
             number_line[key['c']] = Template(first[key['c']]).safe_substitute(placeholder = plural_name)
         else:
-            number_line[key['e']] = "How many %s %s would you like to enter?" % (name.lower() if not name.isupper() else name, options.groups)
+            number_line[key['e']] = "How many %s %s would you like to enter(maximum of %d)?" % (name.lower() if not name.isupper() else name, options.groups, times)
             number_line[key['c']] = Template(first[key['c']]).safe_substitute(placeholder = "%s %s" % (name.lower() if not name.isupper() else name, options.groups))
 
 
         number_line[key['h']] = "integer"
-        number_line[key['i']] = "0"
-        number_line[key['j']] = times
+        if not options.validation_off:
+            number_line[key['i']] = "0"
+            number_line[key['j']] = times
         logic = first[key['l']]
         if len(logic.strip()):
            for pairs in ids.items():
@@ -536,10 +537,11 @@ def repeat_group(group, path=[], ids={}, depth=0, iterations=[], parent_group=[]
                      new_line[key['l']] = "(%s) and %s" % (logic, "[%s]>=%d" % (show_instance, iteration))
                  else:
                      new_line[key['l']] = "[%s]>=%d" % (show_instance, iteration)
-             
+
              # Support for matrix group name
-             if new_line[key['p']].strip():
-                 new_line[key['p']] = "%s%s%d" % (prefix, new_line[key['p']],iteration) 
+             if (len(new_line) - 1) >= key['p']:
+                 if new_line[key['p']].strip():
+                     new_line[key['p']] = "%s%s%d" % (prefix, new_line[key['p']],iteration) 
 
              new_rows.append(new_line)
         # If using prompt or auto scheme, generate the logic to use for the next group 
@@ -657,6 +659,8 @@ if __name__ == "__main__":
     parser.add_option("-d", "--debug", dest="debug", default=False, action="store_true", help = "Print debug statements. Useful for determine what groups and nested groups have been found.")
     parser.add_option("-m", "--max_repeat", default=10, dest="max_repeat", action="store",
             help="The maximum number of repeating groups to use in situations where it is not defined.")
+    parser.add_option("-v", "--validation_off", default=False, dest="validation_off", action="store",
+            help="Disable use of REDCap input validation")
     (options, args) = parser.parse_args()
 
     if options.auto and options.prompt:
