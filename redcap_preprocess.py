@@ -659,7 +659,7 @@ if __name__ == "__main__":
     parser.add_option("-d", "--debug", dest="debug", default=False, action="store_true", help = "Print debug statements. Useful for determine what groups and nested groups have been found.")
     parser.add_option("-m", "--max_repeat", default=10, dest="max_repeat", action="store",
             help="The maximum number of repeating groups to use in situations where it is not defined.")
-    parser.add_option("-v", "--validation_off", default=False, dest="validation_off", action="store",
+    parser.add_option("-v", "--validation_off", default=False, dest="validation_off", action="store_true",
             help="Disable use of REDCap input validation")
     (options, args) = parser.parse_args()
 
