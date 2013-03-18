@@ -421,8 +421,8 @@ def repeat_group(group, path=[], ids={}, depth=0, iterations=[], parent_group=[]
             number_line[key['c']] = Template(first[key['c']]).safe_substitute(placeholder = "%s %s" % (name.lower() if not name.isupper() else name, options.groups))
 
 
-        number_line[key['h']] = "integer"
         if not options.validation_off:
+            number_line[key['h']] = "integer"
             number_line[key['i']] = "0"
             number_line[key['j']] = times
         logic = first[key['l']]
@@ -542,6 +542,9 @@ def repeat_group(group, path=[], ids={}, depth=0, iterations=[], parent_group=[]
              if (len(new_line) - 1) >= key['p']:
                  if new_line[key['p']].strip():
                      new_line[key['p']] = "%s%s%d" % (prefix, new_line[key['p']],iteration) 
+
+             if options.validation_off:
+                new_line[key['h']] = new_line[key['i']] = new_line[key['j']] = ''
 
              new_rows.append(new_line)
         # If using prompt or auto scheme, generate the logic to use for the next group 
