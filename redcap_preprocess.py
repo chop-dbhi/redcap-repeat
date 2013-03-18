@@ -145,8 +145,13 @@ def minmax(line, minimum="minimum", maximum="maximum"):
 def details(line, kind = "checkbox", detail_kind = "text", details = None ):
     choices = line[key['f']].split("|")
     choices = [x.split(",") for x in choices]
-    choices = [(x[0].strip(), x[1].strip()) for x in choices]
-    
+    try:
+        choices = [(x[0].strip(), x[1].strip()) for x in choices]
+    except IndexError:
+        sys.stderr.write("Error processing record %s, please check that the field choices all have a comma"
+            " between the number and the choice.\n" % line[key['a']])
+        sys.exit()
+
     if details == None:
         details = [x[1].lower() for x in choices]
 
