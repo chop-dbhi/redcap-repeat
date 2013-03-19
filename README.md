@@ -155,19 +155,16 @@ sideaffect repeat 3 Side Affect                    | text             | $s side 
 ### Repeating field prompt modes
 By default, the script will generate a question before each repeating item asking how many you would like to enter and then show that many instances of the field. There are two other modes controlled by flags on the command prompt. Using -a will cause the script to automatically show the first instance of the repeating item, and as the first field in each repeating group of fields is filled in, it will show the next repeating field. Using the -p flag will cause the script to add a checkbox field after each repeating group asking if you would like to enter another.
 
-## Branching logic details
+### Branching logic details
 
 The script will try to preserve any branching logic you put in place ahead of time while inserting any necessary additional logic. The intention is that it should work as one would expect. If a situation is encountered where this is not true, please report it.
 
-## Custom fields within repeating fields/groups
+### Custom fields within repeating fields/groups
 Custom field types (described below) should work seamlessly with repeating fields and should not require any additional work. If any bugs are encountered, please report them.
 
-## Caveats
- 
-This is beta software. It has been used internally for one complex project but there are sure to be unexpected edge cases. Please make sure to backup any data dictionary files you run through the script. This has not been test on calculated fields used within repeating groups.
 
-## Specify commonly used field types in one line
-Instead of manually creating multiple RedCap&trade; fields to capture data for a single discrete value, use a custom type, and let this preprocess script do all the hard work. Let's see a few examples.
+## Custom Datatypes - Specify commonly used field types in one line
+Instead of manually creating multiple RedCap&trade; fields to capture data for what is ultimately a single discrete value, use a custom type, and let this script do all the hard work. Let's see a few examples.
 
 ### Minimum and Maximum
 
@@ -274,6 +271,10 @@ There are two convenience unit types that work the same way as value\_with\_unit
 
 * weight\_value\_with\_units
 * height\_value\_with\_units
+
+## Caveats
+ 
+This is beta software. It has been used internally for one complex project but there are sure to be unexpected edge cases. Please make sure to backup any data dictionary files you run through the script. This has not been test on calculated fields used within repeating groups.
 
 ## Usage
 The script is written in python. It has no required external dependencies, but you may want to install the python inflector package which will help properly pluralize repeating item names in generated questions. To install the inflector, issue the following from the command prompt:
