@@ -419,10 +419,10 @@ def repeat_group(group, path=[], ids={}, depth=0, iterations=[], parent_group=[]
                  plural_name = plural_name.lower() if not plural_name.isupper() else plural_name
                  plural_name = pluralize(plural_name)
             
-            number_line[key['e']] = "How many %s would you like to enter(maximum of %d)?" % (plural_name, times)
+            number_line[key['e']] = "How many %s would you like to enter (up to %d)?" % (plural_name, times)
             number_line[key['c']] = Template(first[key['c']]).safe_substitute(placeholder = plural_name)
         else:
-            number_line[key['e']] = "How many %s %s would you like to enter(maximum of %d)?" % (name.lower() if not name.isupper() else name, options.groups, times)
+            number_line[key['e']] = "How many %s %s would you like to enter (up to %d)?" % (name.lower() if not name.isupper() else name, options.groups, times)
             number_line[key['c']] = Template(first[key['c']]).safe_substitute(placeholder = "%s %s" % (name.lower() if not name.isupper() else name, options.groups))
 
 
