@@ -16,14 +16,14 @@
     <!-- HEADER -->
     <div id="header_wrap" class="outer">
         <header class="inner">
-          <a id="forkme_banner" href="https://github.com/cbmi/redcap_preprocess">View on GitHub</a>
+          <a id="forkme_banner" href="https://github.com/cbmi/redcap-repeat">View on GitHub</a>
 
           <h1 id="project_title">Redcap preprocess</h1>
           <h2 id="project_tagline">Preprocess script for RedCap data dictionaries to support custom types and repeating fields</h2>
 
             <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/cbmi/redcap_preprocess/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/cbmi/redcap_preprocess/tarball/master">Download this project as a tar.gz file</a>
+              <a class="zip_download_link" href="https://github.com/cbmi/redcap-repeat/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/cbmi/redcap-repeat/tarball/master">Download this project as a tar.gz file</a>
             </section>
         </header>
     </div>
@@ -31,255 +31,29 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
-        <h1>RedCap™ preprocess script</h1>
+        <h1>REDCap™ Repeat Script</h1>
 
-<p>Preprocess script for RedCap™ data dictionaries witten by CBMi to support custom types and repeating fields.</p>
+<p>This is a script for REDCap™ data dictionaries written by CBMi to support repeating fields and groups of fields. It also features custom convenience datatypes for things like "minimum and maximum" and "checkbox with other".  </p>
 
-<p>RedCap™ is a great tool. It allows anyone to quickly and easily create and share case report forms and surveys. But sometimes to capture common concepts, or multiple instances of a single concept, you need to create groups of fields with complex branching logic over and over. This preprocess script seeks to solve this problem.</p>
+<p>REDCap™ is a great tool. It allows anyone to quickly and easily create and share case report forms and surveys. But sometimes to capture common concepts, or multiple instances of a single concept, you need to create groups of fields with complex branching logic over and over. This script helps solve this problem.  It allows you to annotate an existing REDCap™ data dictionary with special directives (for example, "this field can repeat 3 times") and produces a data dictionary that just works. </p>
 
-<h2>Specify commonly used field types in one line</h2>
+<h2>How it works</h2>
 
-<p>Instead of manually creating multiple RedCap™ fields to capture data for a single discrete value, use a custom type, and let this preprocess script do all the hard work. Let's see a few examples.</p>
+<ol>
+<li>Create your data dictionary in Excel as usual, using the commands and types described below where convenient.</li>
+<li>Run the dictionary through the Repeat script.</li>
+<li>Upload the dictionary created by the script to REDCap™.</li>
+</ol><p>If you need to make a change to the dictionary, you make it to your original data dictionary and repeat steps 2 and 3.</p>
 
-<h3>Minimum and Maximum</h3>
+<h1>Features</h1>
 
-<p>Instead of creating two RedCap™ number fields to capture a range of numbers, just use the minmax field type. Give the preprocess script this:</p>
+<h2>Repeating fields</h2>
 
-<table>
-<tr>
-<th>Field Name</th>
-<th>Field Type</th>
-<th>Field Label</th>
-<th>Text Validation Type</th>
-</tr>
-<tr>
-<td>temp</td>
-<td>minmax</td>
-<td>Temperature $placeholder</td>
-<td>number</td>
-</tr>
-</table><p>and it will turn it into this:</p>
-
-<table>
-<tr>
-<th>Field Name</th>
-<th>Field Type</th>
-<th>Field Label</th>
-<th>Text Validation Type</th>
-</tr>
-<tr>
-<td>temp_minimum</td>
-<td>text</td>
-<td>Temperature minimum</td>
-<td>number</td>
-</tr>
-<tr>
-<td>temp_maximum</td>
-<td>text</td>
-<td>Temperature maximum</td>
-<td>number</td>
-</tr>
-</table><p>All other columns will be preserved just as you would expect. </p>
-
-<h3>Checkbox with Other</h3>
-
-<p>Specify checkbox_other to automatically create a checkbox field followed by a text field to specify further details. The branching logic to only show the details field when the Other choice is selected will be written for you.</p>
-
-<table>
-<tr>
-<th>Field Name</th>
-<th>Field Type</th>
-<th>Field Label</th>
-<th>Choices</th>
-</tr>
-<tr>
-<td>relative</td>
-<td>checkbox_other</td>
-<td>Affected relatives</td>
-<td>1, Mom |  2, Dad | 3, Other</td>
-</tr>
-</table><p>will become:</p>
-
-<table>
-<tr>
-<th>Field Name</th>
-<th>Field Type</th>
-<th>Field Label</th>
-<th>Choices</th>
-<th>Branching Logic</th>
-</tr>
-<tr>
-<td>relative</td>
-<td>checkbox</td>
-<td>Affected relatives</td>
-<td>1, Mom |  2, Dad | 3, Other</td>
-<td></td>
-</tr>
-<tr>
-<td>relative_other</td>
-<td>text</td>
-<td>Other Affected relatives</td>
-<td></td>
-<td>[relative(3)] = '1'</td>
-</tr>
-</table><h4>Controlling the language used in the Field Label for generated fields</h4>
-
-<p>The preprocess script tries to use very generic language for generated Field Labels. Placing a pipe in the Field Label field followed by something like this</p>
-
-<pre><code>Please specify $placeholder relative
-</code></pre>
-
-<p>will allow you to control the generated Field Label, producing this</p>
-
-<pre><code>Please specify other relative
-</code></pre>
-
-<p>A specific example:</p>
-
-<table>
-<tr>
-<th>Field Name</th>
-<th>Field Type</th>
-<th>Field Label</th>
-<th>Choices</th>
-</tr>
-<tr>
-<td>temp</td>
-<td>checkbox_other</td>
-<td>Affected relatives | Please specify $placeholder affected relative</td>
-<td>1, Mom |  2, Dad | 3, Other</td>
-</tr>
-</table><p>will become:</p>
-
-<table>
-<tr>
-<th>Field Name</th>
-<th>Field Type</th>
-<th>Field Label</th>
-<th>Choices</th>
-<th>Branching Logic</th>
-</tr>
-<tr>
-<td>temp</td>
-<td>checkbox</td>
-<td>Affected relatives</td>
-<td>1, Mom |  2, Dad | 3, Other</td>
-<td></td>
-</tr>
-<tr>
-<td>temp_other</td>
-<td>text</td>
-<td>Please specify other affected relative</td>
-<td></td>
-<td>[temp(3)] = '1'</td>
-</tr>
-</table><h3>Checkbox with details for each option</h3>
-
-<p>Similar to checkbox_other, the checkbox_details type will create textbox fields that will show for each checkbox selected. It works the same way as the checkbox_other except for creating additionally conditional fields.</p>
-
-<h3>Radio/Dropdown other and Radio/Dropdown with details</h3>
-
-<p>There are equivalent custom types for radio and dropdown (radio_other, radio_details, dropdown_other, and dropdown_details) that work exactly the same as the checkbox_other and checkbox_details types.</p>
-
-<h3>Age in weeks and days</h3>
-
-<p>The custom type age_weeks_days will create the two individual week and day fields with the correct range restrictions. This is especially useful for capturing gestational age.</p>
-
-<p>For example:</p>
-
-<table>
-<tr>
-<th>Field Name</th>
-<th>Field Type</th>
-<th>Field Label</th>
-<th>Min Value</th>
-<th>Max Value</th>
-</tr>
-<tr>
-<td>gestational_age</td>
-<td>age_weeks_days</td>
-<td>Gestational age $placeholder</td>
-<td></td>
-<td></td>
-</tr>
-</table><p>becomes:</p>
-
-<table>
-<tr>
-<th>Field Name</th>
-<th>Field Type</th>
-<th>Field Label</th>
-<th>Min Value</th>
-<th>Max Value</th>
-</tr>
-<tr>
-<td>gestational_age_weeks</td>
-<td>text</td>
-<td>Gestational age in weeks</td>
-<td>0</td>
-<td>52</td>
-</tr>
-<tr>
-<td>gestational_age_days</td>
-<td>text</td>
-<td>Gestational age in days</td>
-<td>0</td>
-<td>6</td>
-</tr>
-</table><h3>Age in years and months</h3>
-
-<p>There is a custom field available for age in years and months as well. Specify the type as age_years_months to use it. It works exactly the same as age_weeks_days</p>
-
-<h3>Value with Units</h3>
-
-<p>For a measurement and value that requires units to be specified, use the value_with_units custom type.</p>
-
-<table>
-<tr>
-<th>Field Name</th>
-<th>Field Type</th>
-<th>Field Label</th>
-</tr>
-<tr>
-<td>potassium_level</td>
-<td>value_with_units</td>
-<td>Potassium level</td>
-</tr>
-</table><p>becomes:</p>
-
-<table>
-<tr>
-<th>Field Name</th>
-<th>Field Type</th>
-<th>Field Label</th>
-<th>Text Validation Type</th>
-</tr>
-<tr>
-<td>potassium_level</td>
-<td>text</td>
-<td>Potassium level</td>
-<td>number</td>
-</tr>
-<tr>
-<td>potassium_level_units</td>
-<td>text</td>
-<td>Potassium level units</td>
-<td></td>
-</tr>
-</table><h4>Convenience unit types</h4>
-
-<p>There are two convenience unit types that work the same way as value_with_unit, but instead of a free text input for units, provide a dropdown with specific choices. These are</p>
-
-<ul>
-<li>weight_value_with_units</li>
-<li>height_value_with_units</li>
-</ul><h2>Repeating fields</h2>
-
-<p>RedCap™ does not support the ability to specify that a given field repeats a variable number of times. For example, specifyng a list of medications requires creating a number of medicine fields and various complex branching schemes. The preprocess script can help.</p>
+<p>REDCap™ does not support the ability to specify that a given field repeats a variable number of times. For example, specifying a list of medications requires creating a number of medicine fields and various complex branching schemes. This script can help.</p>
 
 <h3>The Basics</h3>
 
-<p>To specify that a field repeats, use the following in the field name column:</p>
+<p>To specify that a field should repeat, use the following in the field name column:</p>
 
 <p>&lt;field_name&gt; repeat &lt;maximum number of times field repeats&gt; &lt;Name of Repeat&gt;</p>
 
@@ -489,7 +263,7 @@
 </tr>
 </table><h3>Repeating groups of fields</h3>
 
-<p>Sometimes you want a group of fields to repeat instead of just a single field. For example, you might be trying date and result of a series of hand xrays. To do this, follow the same rules for single field repeats except change "repeat" to "startrepeat" and terminate the repeating group by putting "endrepeat" after the Field Label of the last field in the group.
+<p>Sometimes you want a group of fields to repeat instead of just a single field. For example, you might be trying to capture date and result of a series of hand xrays. To do this, follow the same rules for single field repeats except change "repeat" to "startrepeat" and terminate the repeating group by putting "endrepeat" after the Field Label of the last field in the group.
 For example:</p>
 
 <table>
@@ -898,30 +672,266 @@ For example:</p>
 </tr>
 </table><h3>Repeating field prompt modes</h3>
 
-<p>By default, the preprocess script will generate a question before each repeating item asking how many you would like to enter and then show that many instances of the field. There are two other modes controlled by flags on the command prompt. Using -a will cause the preprocess script to automatically show the first instance of the repeating item, and as the first field in each repeating group of fields is filled in, it will show the next repeating field. Using the -p flag will cause the preprocess script to add a checkbox field after each repeating group asking if you would like to enter another.</p>
+<p>By default, the script will generate a question before each repeating item asking how many you would like to enter and then show that many instances of the field. There are two other modes controlled by flags on the command prompt. Using -a will cause the script to automatically show the first instance of the repeating item, and as the first field in each repeating group of fields is filled in, it will show the next repeating field. Using the -p flag will cause the script to add a checkbox field after each repeating group asking if you would like to enter another.</p>
 
-<h2>Branching logic details</h2>
+<h3>Branching logic details</h3>
 
-<p>The preprocess script will try to preserve any branching logic you put in place ahead of time while inserting any necessary additional logic. The intention is that it should work as one would expect. If a situation is encountered where this is not true, please report it.</p>
+<p>The script will try to preserve any branching logic you put in place ahead of time while inserting any necessary additional logic. The intention is that it should work as one would expect. If a situation is encountered where this is not true, please report it.</p>
 
-<h2>Custom fields within repeating fields/groups</h2>
+<h3>Custom fields within repeating fields/groups</h3>
 
-<p>Custom field types should work seamlessly with repeating fields and should not require any additional work. If any bugs are encountered, please report them.</p>
+<p>Custom field types (described below) should work seamlessly with repeating fields and should not require any additional work. If any bugs are encountered, please report them.</p>
 
-<h2>Caveats</h2>
+<h2>Custom Datatypes - Specify commonly used field types in one line</h2>
 
-<p>This is beta software. It has been used internally for one complex project but there are sure to be unexpected edge cases. Please make sure to backup any data dictionary files you run through the preprocess script. This has not been tested on longitudinal projects (so events are not tested, although it may work), calculated fields, or project arms. There should be no techinical boundaries to implementing these features.</p>
+<p>Instead of manually creating multiple RedCap™ fields to capture data for what is ultimately a single discrete value, use a custom type, and let this script do all the hard work. Let's see a few examples.</p>
+
+<h3>Minimum and Maximum</h3>
+
+<p>Instead of creating two RedCap™ number fields to capture a range of numbers, just use the minmax field type. Give the script this:</p>
+
+<table>
+<tr>
+<th>Field Name</th>
+<th>Field Type</th>
+<th>Field Label</th>
+<th>Text Validation Type</th>
+</tr>
+<tr>
+<td>temp</td>
+<td>minmax</td>
+<td>Temperature $placeholder</td>
+<td>number</td>
+</tr>
+</table><p>and it will turn it into this:</p>
+
+<table>
+<tr>
+<th>Field Name</th>
+<th>Field Type</th>
+<th>Field Label</th>
+<th>Text Validation Type</th>
+</tr>
+<tr>
+<td>temp_minimum</td>
+<td>text</td>
+<td>Temperature minimum</td>
+<td>number</td>
+</tr>
+<tr>
+<td>temp_maximum</td>
+<td>text</td>
+<td>Temperature maximum</td>
+<td>number</td>
+</tr>
+</table><p>All other columns will be preserved just as you would expect. </p>
+
+<h3>Checkbox with Other</h3>
+
+<p>Specify checkbox_other to automatically create a checkbox field followed by a text field to specify further details. The branching logic to only show the details field when the Other choice is selected will be written for you.</p>
+
+<table>
+<tr>
+<th>Field Name</th>
+<th>Field Type</th>
+<th>Field Label</th>
+<th>Choices</th>
+</tr>
+<tr>
+<td>relative</td>
+<td>checkbox_other</td>
+<td>Affected relatives</td>
+<td>1, Mom |  2, Dad | 3, Other</td>
+</tr>
+</table><p>will become:</p>
+
+<table>
+<tr>
+<th>Field Name</th>
+<th>Field Type</th>
+<th>Field Label</th>
+<th>Choices</th>
+<th>Branching Logic</th>
+</tr>
+<tr>
+<td>relative</td>
+<td>checkbox</td>
+<td>Affected relatives</td>
+<td>1, Mom |  2, Dad | 3, Other</td>
+<td></td>
+</tr>
+<tr>
+<td>relative_other</td>
+<td>text</td>
+<td>Other Affected relatives</td>
+<td></td>
+<td>[relative(3)] = '1'</td>
+</tr>
+</table><h4>Controlling the language used in the Field Label for generated fields</h4>
+
+<p>The script tries to use very generic language for generated Field Labels. Placing a pipe in the Field Label field followed by something like this</p>
+
+<pre><code>Please specify $placeholder relative
+</code></pre>
+
+<p>will allow you to control the generated Field Label, producing this</p>
+
+<pre><code>Please specify other relative
+</code></pre>
+
+<p>A specific example:</p>
+
+<table>
+<tr>
+<th>Field Name</th>
+<th>Field Type</th>
+<th>Field Label</th>
+<th>Choices</th>
+</tr>
+<tr>
+<td>temp</td>
+<td>checkbox_other</td>
+<td>Affected relatives | Please specify $placeholder affected relative</td>
+<td>1, Mom |  2, Dad | 3, Other</td>
+</tr>
+</table><p>will become:</p>
+
+<table>
+<tr>
+<th>Field Name</th>
+<th>Field Type</th>
+<th>Field Label</th>
+<th>Choices</th>
+<th>Branching Logic</th>
+</tr>
+<tr>
+<td>temp</td>
+<td>checkbox</td>
+<td>Affected relatives</td>
+<td>1, Mom |  2, Dad | 3, Other</td>
+<td></td>
+</tr>
+<tr>
+<td>temp_other</td>
+<td>text</td>
+<td>Please specify other affected relative</td>
+<td></td>
+<td>[temp(3)] = '1'</td>
+</tr>
+</table><h3>Checkbox with details for each option</h3>
+
+<p>Similar to checkbox_other, the checkbox_details type will create textbox fields that will show for each checkbox selected. It works the same way as the checkbox_other except for creating additionally conditional fields.</p>
+
+<h3>Radio/Dropdown other and Radio/Dropdown with details</h3>
+
+<p>There are equivalent custom types for radio and dropdown (radio_other, radio_details, dropdown_other, and dropdown_details) that work exactly the same as the checkbox_other and checkbox_details types.</p>
+
+<h3>Age in weeks and days</h3>
+
+<p>The custom type age_weeks_days will create the two individual week and day fields with the correct range restrictions. This is especially useful for capturing gestational age.</p>
+
+<p>For example:</p>
+
+<table>
+<tr>
+<th>Field Name</th>
+<th>Field Type</th>
+<th>Field Label</th>
+<th>Min Value</th>
+<th>Max Value</th>
+</tr>
+<tr>
+<td>gestational_age</td>
+<td>age_weeks_days</td>
+<td>Gestational age $placeholder</td>
+<td></td>
+<td></td>
+</tr>
+</table><p>becomes:</p>
+
+<table>
+<tr>
+<th>Field Name</th>
+<th>Field Type</th>
+<th>Field Label</th>
+<th>Min Value</th>
+<th>Max Value</th>
+</tr>
+<tr>
+<td>gestational_age_weeks</td>
+<td>text</td>
+<td>Gestational age in weeks</td>
+<td>0</td>
+<td>52</td>
+</tr>
+<tr>
+<td>gestational_age_days</td>
+<td>text</td>
+<td>Gestational age in days</td>
+<td>0</td>
+<td>6</td>
+</tr>
+</table><h3>Age in years and months</h3>
+
+<p>There is a custom field available for age in years and months as well. Specify the type as age_years_months to use it. It works exactly the same as age_weeks_days</p>
+
+<h3>Value with Units</h3>
+
+<p>For a measurement and value that requires units to be specified, use the value_with_units custom type.</p>
+
+<table>
+<tr>
+<th>Field Name</th>
+<th>Field Type</th>
+<th>Field Label</th>
+</tr>
+<tr>
+<td>potassium_level</td>
+<td>value_with_units</td>
+<td>Potassium level</td>
+</tr>
+</table><p>becomes:</p>
+
+<table>
+<tr>
+<th>Field Name</th>
+<th>Field Type</th>
+<th>Field Label</th>
+<th>Text Validation Type</th>
+</tr>
+<tr>
+<td>potassium_level</td>
+<td>text</td>
+<td>Potassium level</td>
+<td>number</td>
+</tr>
+<tr>
+<td>potassium_level_units</td>
+<td>text</td>
+<td>Potassium level units</td>
+<td></td>
+</tr>
+</table><h4>Convenience unit types</h4>
+
+<p>There are two convenience unit types that work the same way as value_with_unit, but instead of a free text input for units, provide a dropdown with specific choices. These are</p>
+
+<ul>
+<li>weight_value_with_units</li>
+<li>height_value_with_units</li>
+</ul><h2>Caveats</h2>
+
+<p>This is beta software. It has been used internally for one complex project but there are sure to be unexpected edge cases. Please make sure to backup any data dictionary files you run through the script. This has not been test on calculated fields used within repeating groups.</p>
 
 <h2>Usage</h2>
 
-<p>The preprocess script is written in python. It has no required external dependencies, but you may want to install the python inflector package which will help properly pluralize repeating item names in generated questions. To install the inflector, issue the following from the command prompt:</p>
+<p>The script is written in python. It has no required external dependencies, but you may want to install the python inflector package which will help properly pluralize repeating item names in generated questions. To install the inflector, issue the following from the command prompt:</p>
 
-<pre><code>pip install inflector
+<pre><code>easy_install inflector
 </code></pre>
 
-<p>To execute the preprocess script, call it from the command prompt as follows:</p>
+<p>To execute the script, call it from the command prompt as follows:</p>
 
-<pre><code>python redcap_preprocess.py "name of input file" "name of output file"
+<pre><code>python redcap_repeat.py "name of input file" "name of output file"
 </code></pre>
 
 <p>Use the -h flag to see a description of available options.</p>
