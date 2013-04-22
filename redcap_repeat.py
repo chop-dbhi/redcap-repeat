@@ -161,8 +161,8 @@ def unknown_none (line, kind = "checkbox", detail_kind = "descriptive", details 
         x = x.lstrip('  ')
         x = x.rstrip('  ')
         index = index.lstrip(' ')
-        if x == 'unknown':
-                prompt = "You selected unknown and another answer choice. Please revise your answer."
+        if x == 'none':
+                prompt = "You selected none and another answer choice. Please revise your answer."
                 other_line = line[:]
                 other_line[key['a']] = preserve_metadata("middle", "_%s" % clean(choice), line[key['a']])
                 other_line[key['d']] = detail_kind
@@ -181,8 +181,8 @@ def unknown_none (line, kind = "checkbox", detail_kind = "descriptive", details 
                         other_line[key['l']] = branching_final % sub_list        
                 new_lines.append(other_line)
             
-        if x == 'none':
-                prompt = "You selected none and another answer choice. Please revise your answer."
+        if x == 'unknown':
+                prompt = "You selected unknown and another answer choice. Please revise your answer."
                 other_line2 = line[:]
                 other_line2[key['a']] = preserve_metadata("middle", "_%s" % clean(choice), line[key['a']])
                 other_line2[key['d']] = detail_kind
@@ -194,10 +194,11 @@ def unknown_none (line, kind = "checkbox", detail_kind = "descriptive", details 
                         branching_string = "[%s(%s)]='1' AND ([%s(%s)] = '1' or "
                         string_add = "[%s(%s)] = '1' or "
                         string_final = "[%s(%s)] = '1')"
-                        branching_final = branching_string+(size-3)*string_add+string_final
+                        branching_final = branching_string+(size-2)*string_add+string_final
                         sub_list = (line[key['a']].split(" ")[0], index, line[key['a']].split(" ")[0], int(index) - 1)
-                        for r in range(len(choices)-2):
-                            sub_list = sub_list + (line[key['a']].split(" ")[0], int(index) + r + 1)                
+                        for r in range(len(choices) - 2):
+                            sub_list = sub_list + (line[key['a']].split(" ")[0], r + 1)
+                        sub_list = sub_list + (line[key['a']].split(" ")[0], int(index) + 1)
                         other_line2[key['l']] = branching_final % sub_list
                 new_lines.append(other_line2)    
     return new_lines
