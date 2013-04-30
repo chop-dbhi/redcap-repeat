@@ -161,7 +161,7 @@ def unknown_none (line, kind = "checkbox", detail_kind = "descriptive", details 
         x = x.lstrip('  ')
         x = x.rstrip('  ')
         index = index.lstrip(' ')
-        mutexes = ['none', 'unknown', 'result not known', 'results not known', 'unknown/not documented', 'unknown or not reported']
+        mutexes = ['none', 'unknown', 'result not known', 'unknown/not documented', 'unknown or not reported']
         for mutex in mutexes:
             if x == mutex:
                 prompt = "You selected %s and another answer choice. Please revise your answer." % mutex
