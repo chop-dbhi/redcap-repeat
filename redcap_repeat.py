@@ -161,46 +161,32 @@ def unknown_none (line, kind = "checkbox", detail_kind = "descriptive", details 
         x = x.lstrip('  ')
         x = x.rstrip('  ')
         index = index.lstrip(' ')
-        if x == 'none':
-                prompt = "You selected none and another answer choice. Please revise your answer."
+        mutexes = ['none', 'unknown', 'result not known', 'results not known', 'unknown/not documented', 'unknown or not reported']
+        for mutex in mutexes:
+            if x == mutex:
+                prompt = "You selected %s and another answer choice. Please revise your answer." % mutex
                 other_line = line[:]
                 other_line[key['a']] = preserve_metadata("middle", "_%s" % clean(choice), line[key['a']])
                 other_line[key['d']] = detail_kind
                 other_line[key['f']] = ""
                 other_line[key['e']] = prompt
-                if size <= 2:
+                if size <= 2 and index == 1:
                     other_line[key['l']] = "[%s(%s)]='1' AND [%s(%s)] = '1'" % (line[key['a']].split(" ")[0], index, line[key['a']].split(" ")[0], int(index) + 1)
+                elif size <= 2 and index == 2:
+                    other_line[key['l']] = "[%s(%s)]='1' AND [%s(%s)] = '1'" % (line[key['a']].split(" ")[0], index, line[key['a']].split(" ")[0], int(index) - 1)
                 else:
+                    for z in range(3, size + 1):
                         branching_string = "[%s(%s)]='1' AND ([%s(%s)] = '1' or "
                         string_add = "[%s(%s)] = '1' or "
                         string_final = "[%s(%s)] = '1')"
                         branching_final = branching_string+(size-3)*string_add+string_final
-                        sub_list = (line[key['a']].split(" ")[0], index, line[key['a']].split(" ")[0], int(index) + 1)
-                        for r in range(len(choices)-2):
-                            sub_list = sub_list + (line[key['a']].split(" ")[0], int(index) + r + 2)                
-                        other_line[key['l']] = branching_final % sub_list        
-                new_lines.append(other_line)
-            
-        if x == 'unknown':
-                prompt = "You selected unknown and another answer choice. Please revise your answer."
-                other_line2 = line[:]
-                other_line2[key['a']] = preserve_metadata("middle", "_%s" % clean(choice), line[key['a']])
-                other_line2[key['d']] = detail_kind
-                other_line2[key['f']] = ""
-                other_line2[key['e']] = prompt
-                if size <= 2:
-                    other_line2[key['l']] = "[%s(%s)]='1' AND [%s(%s)] = '1'" % (line[key['a']].split(" ")[0], index, line[key['a']].split(" ")[0], int(index) - 1)
-                else:
-                        branching_string = "[%s(%s)]='1' AND ([%s(%s)] = '1' or "
-                        string_add = "[%s(%s)] = '1' or "
-                        string_final = "[%s(%s)] = '1')"
-                        branching_final = branching_string+(size-2)*string_add+string_final
-                        sub_list = (line[key['a']].split(" ")[0], index, line[key['a']].split(" ")[0], int(index) - 1)
-                        for r in range(len(choices) - 2):
-                            sub_list = sub_list + (line[key['a']].split(" ")[0], r + 1)
-                        sub_list = sub_list + (line[key['a']].split(" ")[0], int(index) + 1)
-                        other_line2[key['l']] = branching_final % sub_list
-                new_lines.append(other_line2)    
+                        sub_list = (line[key['a']].split(" ")[0], index)
+                        for r in range(1,int(index)):
+                            sub_list = sub_list + (line[key['a']].split(" ")[0], r)
+                        for r in range(int(index) + 1, size + 1):
+                            sub_list = sub_list + (line[key['a']].split(" ")[0], r)
+                        other_line[key['l']] = branching_final % sub_list
+                new_lines.append(other_line) 
     return new_lines
 
 def details(line, kind = "checkbox", detail_kind = "text", details = None ):
