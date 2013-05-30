@@ -221,7 +221,7 @@ def checkbox_mutex_other (line, kind = "checkbox", detail_kind = "descriptive", 
             if x == mutex:
                 prompt = "You selected %s and another answer choice. Please revise your answer." % mutex
                 other_line = line[:]
-                other_line[key['a']] = preserve_metadata("middle", "_%s" % x, line[key['a']])
+                other_line[key['a']] = preserve_metadata("middle", "_%s" % clean(x), line[key['a']])
                 other_line[key['d']] = detail_kind
                 other_line[key['f']] = ""
                 other_line[key['e']] = prompt
@@ -246,14 +246,14 @@ def checkbox_mutex_other (line, kind = "checkbox", detail_kind = "descriptive", 
                 new_lines.append(other_line)
         if x == 'other' and other == True:
             other_line = line[:]
-            other_line[key['a']] = preserve_metadata("middle", "_%s" % x, line[key['a']])
+            other_line[key['a']] = preserve_metadata("middle", "_%s" % clean(x), line[key['a']])
             other_line[key['d']] = "notes"
             other_line[key['f']] = ""
             prompt = "Please specify details for %s" % x
             other_line[key['e']] = prompt
             other_line[key['l']] = "[%s(%s)]='1'" % (line[key['a']].split(" ")[0], index)
             new_lines.append(other_line)
-    new_lines[-1][key['a']] = preserve_metadata("end", "_%s" % x, line[key['a']])
+    new_lines[-1][key['a']] = preserve_metadata("end", "_%s" % clean(x), line[key['a']])
     return new_lines
 
 def value_units(line, kind = "dropdown", units = []):
