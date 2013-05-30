@@ -26,7 +26,7 @@ import sys
 import copy
 import json
 import logging
-
+# New comment
 from optparse import OptionParser
 from collections import defaultdict
 from string import Template
@@ -139,8 +139,7 @@ def minmax(line, minimum="minimum", maximum="maximum"):
 
     min_line[key['e']] = Template(min_line[key['e']]).safe_substitute(placeholder=minimum)
     max_line[key['e']] = Template(max_line[key['e']]).safe_substitute(placeholder=maximum)
-    return [min_line, max_line] 
-
+    return [min_line, max_line]
 
 def details(line, kind = "checkbox", detail_kind = "text", details = None ):
     choices = line[key['f']].split("|")
@@ -193,6 +192,68 @@ def details(line, kind = "checkbox", detail_kind = "text", details = None ):
     # Go back and fix the last one
     new_lines[-1][key['a']] = preserve_metadata("end", "_%s_dtls" % clean(last_detail), line[key['a']])
 
+    return new_lines
+
+def checkbox_mutex_other (line, kind = "checkbox", detail_kind = "descriptive", details = None, other = False):
+    #create a list of choices by splitting all the options at the "|" character
+    choices = line[key['f']].split("|")
+    choices = [x.split(",") for x in choices]
+    size = len(choices)
+    #convert all the choices to lower case and then create a list with all the options selected by the user
+    details = [x[1].lower() for x in choices]
+    description = line[key['e']].split(" | ")
+    new_line = line[:]
+    new_line[key['a']] = preserve_metadata("begin", "", line[key['a']])
+    new_line[key['e']] = description[0]
+    new_line[key['d']] = kind
+
+    new_lines = [new_line]
+    
+    for index, choice in choices:
+        x = choice.lower()
+        x = x.lstrip('  ')
+        x = x.rstrip('  ')
+        index = index.lstrip(' ')
+        #create list of all possible none/unknown options
+        mutexes = ['none', 'unknown', 'result not known', 'unknown/not documented', 'unknown or not reported']
+        #check for the existence of each one in the list of choices
+        for mutex in mutexes:
+            if x == mutex:
+                prompt = "You selected %s and another answer choice. Please revise your answer." % mutex
+                other_line = line[:]
+                other_line[key['a']] = preserve_metadata("middle", "_%s" % x, line[key['a']])
+                other_line[key['d']] = detail_kind
+                other_line[key['f']] = ""
+                other_line[key['e']] = prompt
+                #deal with the instance if there is only two options
+                if size <= 2 and index == 1:
+                    other_line[key['l']] = "[%s(%s)]='1' and [%s(%s)] = '1'" % (line[key['a']].split(" ")[0], index, line[key['a']].split(" ")[0], int(index) + 1)
+                elif size <= 2 and index == 2:
+                    other_line[key['l']] = "[%s(%s)]='1' and [%s(%s)] = '1'" % (line[key['a']].split(" ")[0], index, line[key['a']].split(" ")[0], int(index) - 1)
+                #more than two options
+                else:
+                    for z in range(3, size + 1):
+                        branching_string = "[%s(%s)]='1' and ([%s(%s)] = '1' or "
+                        string_add = "[%s(%s)] = '1' or "
+                        string_final = "[%s(%s)] = '1')"
+                        branching_final = branching_string+(size-3)*string_add+string_final
+                        sub_list = (line[key['a']].split(" ")[0], index)
+                        for r in range(1,int(index)):
+                            sub_list = sub_list + (line[key['a']].split(" ")[0], r)
+                        for r in range(int(index) + 1, size + 1):
+                            sub_list = sub_list + (line[key['a']].split(" ")[0], r)
+                        other_line[key['l']] = branching_final % sub_list
+                new_lines.append(other_line)
+        if x == 'other' and other == True:
+            other_line = line[:]
+            other_line[key['a']] = preserve_metadata("middle", "_%s" % x, line[key['a']])
+            other_line[key['d']] = "notes"
+            other_line[key['f']] = ""
+            prompt = "Please specify details for %s" % x
+            other_line[key['e']] = prompt
+            other_line[key['l']] = "[%s(%s)]='1'" % (line[key['a']].split(" ")[0], index)
+            new_lines.append(other_line)
+    new_lines[-1][key['a']] = preserve_metadata("end", "_%s" % x, line[key['a']])
     return new_lines
 
 def value_units(line, kind = "dropdown", units = []):
@@ -347,6 +408,10 @@ dispatch['dropdown_details_text'] = partial(details, kind = "dropdown")
 dispatch['dropdown_details_note'] = partial(details, kind = "dropdown", detail_kind = "note")
 dispatch['dropdown_other_text'] = partial(details, kind = "dropdown", details = ["other"])
 dispatch['dropdown_other_note'] = partial(details, kind = "dropdown", details = ["other"], detail_kind = "note")
+
+#adding dispatch for the checkbox_mutex_other function
+dispatch['checkbox_mutex'] = checkbox_mutex_other
+dispatch['checkbox_mutex_other'] = partial(checkbox_mutex_other, other = True)
 
 def repeat_group(group, path=[], ids={}, depth=0, iterations=[], parent_group=[], branch="", pre_logic=""):
     depth += 1
