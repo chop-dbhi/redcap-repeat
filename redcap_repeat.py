@@ -221,11 +221,7 @@ def checkbox_mutex_other (line, kind = "checkbox", detail_kind = "descriptive", 
             if x == mutex:
                 prompt = "You selected %s and another answer choice. Please revise your answer." % mutex
                 other_line = line[:]
-                #check if line uses a startrepeat
-                if 'startrepeat' in line[key['a']]:
-                    other_line[key['a']] = preserve_metadata("middle", "_%s" % x, line[key['a']])
-                else:
-                    other_line[key['a']] = preserve_metadata("end", "_%s" % x, line[key['a']])
+                other_line[key['a']] = preserve_metadata("middle", "_%s" % x, line[key['a']])
                 other_line[key['d']] = detail_kind
                 other_line[key['f']] = ""
                 other_line[key['e']] = prompt
@@ -247,7 +243,6 @@ def checkbox_mutex_other (line, kind = "checkbox", detail_kind = "descriptive", 
                         for r in range(int(index) + 1, size + 1):
                             sub_list = sub_list + (line[key['a']].split(" ")[0], r)
                         other_line[key['l']] = branching_final % sub_list
-                        
                 new_lines.append(other_line)
         if x == 'other' and other == True:
             other_line = line[:]
@@ -258,7 +253,7 @@ def checkbox_mutex_other (line, kind = "checkbox", detail_kind = "descriptive", 
             other_line[key['e']] = prompt
             other_line[key['l']] = "[%s(%s)]='1'" % (line[key['a']].split(" ")[0], index)
             new_lines.append(other_line)
-             
+    new_lines[-1][key['a']] = preserve_metadata("end", "_%s" % x, line[key['a']])
     return new_lines
 
 def value_units(line, kind = "dropdown", units = []):
