@@ -164,7 +164,7 @@ Custom field types (described below) should work seamlessly with repeating field
 
 
 ## Custom Datatypes - Specify commonly used field types in one line
-Instead of manually creating multiple RedCap&trade; fields to capture data for what is ultimately a single discrete value, use a custom type, and let this script do all the hard work. Let's see a few examples.
+Instead of manually creating multiple RedCap&trade; fields to capture data for what is ultimately a single discrete value, use a custom type, and let this script do all the hard work. A list of all available custom datatypes can be found on the [wiki](https://github.com/cbmi/redcap-repeat/wiki/Custom-Types). Let's see a few examples.
 
 ### Minimum and Maximum
 
