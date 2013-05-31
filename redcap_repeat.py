@@ -256,7 +256,7 @@ def checkbox_mutex_other (line, kind = "checkbox", detail_kind = "descriptive", 
     new_lines[-1][key['a']] = preserve_metadata("end", "_%s" % clean(x), line[key['a']])
     return new_lines
 
-def value_units(line, kind = "dropdown", units = []):
+def value_units(line, kind = "dropdown", units = [], just_units = False):
     units_line = line[:]
     value_line = line[:]
     weight = False
@@ -302,7 +302,10 @@ def value_units(line, kind = "dropdown", units = []):
        units_line[key['f']] = " | ".join(["%d, %s" % x for x in enumerate(units)])
 
     units_line[key['g']] = ""
-
+    
+    if just_units:
+       return [units_line]
+    
     return [units_line, value_line] if not weight else [units_line, value_line, oz_line]
 
 def age_weeks_days(line):
@@ -363,18 +366,20 @@ def age_years_months(line):
 
     return [years_line, months_line]
 
-def value_with_units_and_minmax(line, units_kind = "dropdown", range_kind="text", minimum="minimum", maximum="maximum"):
-    new_lines = value_units(line, kind = units_kind)
+def value_with_units_and_minmax(line, units_kind = "dropdown",  minimum="minimum", maximum="maximum", just_units=False):
+    new_lines = value_units(line, kind = units_kind, just_units = just_units)
     line[key['c']] = ""
     new_lines.extend(minmax(line, minimum=minimum, maximum=maximum))
+    length = len(new_lines)
     for index, line in enumerate(new_lines):
         if index == 0:
             line[key['a']]= preserve_metadata("begin", "", line[key['a']])
-        elif index == 1 or index == 2:
+        elif index != length - 1:
             line[key['a']]= preserve_metadata("middle", "", line[key['a']])
-        elif index == 3:
+        else:
             line[key['a']]= preserve_metadata("end", "", line[key['a']])
     return new_lines
+
 
 
 dispatch = defaultdict(lambda : lambda x: [x])
@@ -384,6 +389,7 @@ dispatch['value_with_length_units'] = partial(value_units, units=["in","cm"])
 dispatch['value_with_units'] = partial(value_units, kind = "text")
 dispatch['value_with_units_and_minmax'] = partial(value_with_units_and_minmax, units_kind = "text")
 dispatch['value_with_units_and_normal_range'] = partial(value_with_units_and_minmax, units_kind = "text", minimum = "normal range minimum", maximum="normal range maximum")
+dispatch['range_with_units'] = partial(value_with_units_and_minmax, units_kind = 'text', just_units = True)
 
 dispatch['age_weeks_days'] = age_weeks_days
 dispatch['age_years_months'] = age_years_months 
