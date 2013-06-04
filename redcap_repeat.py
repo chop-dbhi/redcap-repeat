@@ -143,7 +143,7 @@ def minmax(line, minimum="minimum", maximum="maximum"):
 
 def details(line, kind = "checkbox", detail_kind = "text", details = None ):
     choices = line[key['f']].split("|")
-    choices = [x.split(",") for x in choices]
+    choices = [x.split(",", 1) for x in choices]
     try:
         choices = [(x[0].strip(), x[1].strip()) for x in choices]
     except IndexError:
@@ -197,7 +197,7 @@ def details(line, kind = "checkbox", detail_kind = "text", details = None ):
 def checkbox_mutex_other (line, kind = "checkbox", detail_kind = "descriptive", details = None, other = False):
     #create a list of choices by splitting all the options at the "|" character
     choices = line[key['f']].split("|")
-    choices = [x.split(",") for x in choices]
+    choices = [x.split(",", 1) for x in choices]
     size = len(choices)
     #convert all the choices to lower case and then create a list with all the options selected by the user
     details = [x[1].lower() for x in choices]
@@ -208,7 +208,7 @@ def checkbox_mutex_other (line, kind = "checkbox", detail_kind = "descriptive", 
     new_line[key['d']] = kind
 
     new_lines = [new_line]
-    
+
     for index, choice in choices:
         x = choice.lower()
         x = x.lstrip('  ')
