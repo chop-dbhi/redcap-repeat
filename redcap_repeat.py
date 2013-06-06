@@ -199,6 +199,10 @@ def checkbox_mutex_other (line, kind = "checkbox", detail_kind = "descriptive", 
     choices = line[key['f']].split("|")
     choices = [x.split(",", 1) for x in choices]
     size = len(choices)
+    indexes = [];
+    for x in choices:
+        y = x
+        indexes.append(int(y[0]))
     #convert all the choices to lower case and then create a list with all the options selected by the user
     details = [x[1].lower() for x in choices]
     description = line[key['e']].split(" | ")
@@ -232,17 +236,22 @@ def checkbox_mutex_other (line, kind = "checkbox", detail_kind = "descriptive", 
                     other_line[key['l']] = "[%s(%s)]='1' and [%s(%s)] = '1'" % (line[key['a']].split(" ")[0], index, line[key['a']].split(" ")[0], int(index) - 1)
                 #more than two options
                 else:
-                    for z in range(3, size + 1):
-                        branching_string = "[%s(%s)]='1' and ([%s(%s)] = '1' or "
-                        string_add = "[%s(%s)] = '1' or "
-                        string_final = "[%s(%s)] = '1')"
-                        branching_final = branching_string+(size-3)*string_add+string_final
-                        sub_list = (line[key['a']].split(" ")[0], index)
-                        for r in range(1,int(index)):
+                    branching_string = "[%s(%s)]='1' and ([%s(%s)] = '1' or "
+                    string_add = "[%s(%s)] = '1' or "
+                    string_final = "[%s(%s)] = '1')"
+                    branching_final = branching_string+(size-3)*string_add+string_final
+                    sub_list = (line[key['a']].split(" ")[0], index)
+                    for r in range(1,int(index)):
+                        if r not in indexes:
+                            continue
+                        else:
                             sub_list = sub_list + (line[key['a']].split(" ")[0], r)
-                        for r in range(int(index) + 1, size + 1):
+                    for r in range(int(index) + 1, size + 3):
+                        if r not in indexes:
+                            continue
+                        else:
                             sub_list = sub_list + (line[key['a']].split(" ")[0], r)
-                        other_line[key['l']] = branching_final % sub_list
+                    other_line[key['l']] = branching_final % sub_list
                 new_lines.append(other_line)
         if x == 'other' and other == True:
             other_line = line[:]
