@@ -263,6 +263,7 @@ def checkbox_mutex_other (line, kind = "checkbox", detail_kind = "descriptive", 
                     other_line[key['l']] = branching_final % sub_list
                 other_line[key['c']] = ""
                 new_lines.append(other_line)
+
         if x == 'other' and other == True:
             other_line = line[:]
             last = "_%s" % clean(x)
@@ -270,9 +271,10 @@ def checkbox_mutex_other (line, kind = "checkbox", detail_kind = "descriptive", 
             other_line[key['d']] = "notes"
             other_line[key['f']] = ""
             if len(description) > 1:
-                 prompt = Template(description[1]).safe_substitute(placeholder = x)
-            else:
-                prompt = "Please specify details for %s" % x;
+                prompt = Template(description[1]).safe_substitute(placeholder = x)
+            else :
+                prompt = "Please specify other %s" % description[0];
+
             other_line[key['e']] = prompt
             other_line[key['l']] = "[%s(%s)]='1'" % (line[key['a']].split(" ")[0], index)
             other_line[key['c']] = ""
