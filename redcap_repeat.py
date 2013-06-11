@@ -150,7 +150,14 @@ def details(line, kind = "checkbox", detail_kind = "text", details = None ):
         sys.stderr.write("Error processing record %s, please check that the field choices all have a comma"
             " between the number and the choice.\n" % line[key['a']])
         sys.exit()
-
+     
+    if details == False:
+        s = line[key['a']]
+        par = s.find("'")
+        par2 = s.find("'", par+1)
+        details = [s[par+1:par2].lower()]
+        print(details)
+        
     if details == None:
         details = [x[1].lower() for x in choices]
 
@@ -210,19 +217,19 @@ def checkbox_mutex_other (line, kind = "checkbox", detail_kind = "descriptive", 
     new_line[key['a']] = preserve_metadata("begin", "", line[key['a']])
     new_line[key['e']] = description[0]
     new_line[key['d']] = kind
-
+    in_options = False
     new_lines = [new_line]
-
+    mutexes = ['none', 'unknown', 'result not known', 'unknown/not documented', 'unknown or not reported']
     for index, choice in choices:
         x = choice.lower()
         x = x.lstrip('  ')
         x = x.rstrip('  ')
         index = index.lstrip(' ')
         #create list of all possible none/unknown options
-        mutexes = ['none', 'unknown', 'result not known', 'unknown/not documented', 'unknown or not reported']
         #check for the existence of each one in the list of choices
         for mutex in mutexes:
             if x == mutex:
+                in_options = True
                 prompt = "You selected %s and another answer choice. Please revise your answer." % mutex
                 other_line = line[:]
                 other_line[key['a']] = preserve_metadata("middle", "_%s" % clean(x), line[key['a']])
@@ -258,10 +265,17 @@ def checkbox_mutex_other (line, kind = "checkbox", detail_kind = "descriptive", 
             other_line[key['a']] = preserve_metadata("middle", "_%s" % clean(x), line[key['a']])
             other_line[key['d']] = "notes"
             other_line[key['f']] = ""
-            prompt = "Please specify details for %s" % x
+            if len(description) > 1:
+                 prompt = Template(description[1]).safe_substitute(placeholder = x)
+            else:
+                prompt = "Please specify details for %s" % x;
             other_line[key['e']] = prompt
             other_line[key['l']] = "[%s(%s)]='1'" % (line[key['a']].split(" ")[0], index)
             new_lines.append(other_line)
+    if in_options == False:
+        sys.stderr.write("Error processing record %s, please check that a mutex field ('none', 'unknown', 'result not known',"
+            "'unknown/not documented', 'unknown or not reported') exists in the options for the question.\n" % line[key['a']])
+        sys.exit()
     new_lines[-1][key['a']] = preserve_metadata("end", "_%s" % clean(x), line[key['a']])
     return new_lines
 
@@ -427,6 +441,9 @@ dispatch['dropdown_other_note'] = partial(details, kind = "dropdown", details = 
 #adding dispatch for the checkbox_mutex_other function
 dispatch['checkbox_mutex'] = checkbox_mutex_other
 dispatch['checkbox_mutex_other'] = partial(checkbox_mutex_other, other = True)
+
+dispatch['details_specify'] = partial(details, details = False)
+
 
 def repeat_group(group, path=[], ids={}, depth=0, iterations=[], parent_group=[], branch="", pre_logic=""):
     depth += 1
