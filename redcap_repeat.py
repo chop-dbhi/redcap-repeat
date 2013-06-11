@@ -261,6 +261,7 @@ def checkbox_mutex_other (line, kind = "checkbox", detail_kind = "descriptive", 
                         else:
                             sub_list = sub_list + (line[key['a']].split(" ")[0], r)
                     other_line[key['l']] = branching_final % sub_list
+                other_line[key['c']] = ""
                 new_lines.append(other_line)
         if x == 'other' and other == True:
             other_line = line[:]
@@ -274,6 +275,7 @@ def checkbox_mutex_other (line, kind = "checkbox", detail_kind = "descriptive", 
                 prompt = "Please specify details for %s" % x;
             other_line[key['e']] = prompt
             other_line[key['l']] = "[%s(%s)]='1'" % (line[key['a']].split(" ")[0], index)
+            other_line[key['c']] = ""
             new_lines.append(other_line)
     if in_options == False:
         sys.stderr.write("Error processing record %s, please check that a mutex field ('none', 'unknown', 'result not known',"
