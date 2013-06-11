@@ -214,7 +214,8 @@ def checkbox_mutex_other (line, kind = "checkbox", detail_kind = "descriptive", 
     details = [x[1].lower() for x in choices]
     description = line[key['e']].split(" | ")
     new_line = line[:]
-    new_line[key['a']] = preserve_metadata("begin", "", line[key['a']])
+    last = ""
+    new_line[key['a']] = preserve_metadata("begin", last, line[key['a']])
     new_line[key['e']] = description[0]
     new_line[key['d']] = kind
     in_options = False
@@ -232,7 +233,8 @@ def checkbox_mutex_other (line, kind = "checkbox", detail_kind = "descriptive", 
                 in_options = True
                 prompt = "You selected %s and another answer choice. Please revise your answer." % mutex
                 other_line = line[:]
-                other_line[key['a']] = preserve_metadata("middle", "_%s" % clean(x), line[key['a']])
+                last = "_%s" % clean(x)
+                other_line[key['a']] = preserve_metadata("middle", last , line[key['a']])
                 other_line[key['d']] = detail_kind
                 other_line[key['f']] = ""
                 other_line[key['e']] = prompt
@@ -262,7 +264,8 @@ def checkbox_mutex_other (line, kind = "checkbox", detail_kind = "descriptive", 
                 new_lines.append(other_line)
         if x == 'other' and other == True:
             other_line = line[:]
-            other_line[key['a']] = preserve_metadata("middle", "_%s" % clean(x), line[key['a']])
+            last = "_%s" % clean(x)
+            other_line[key['a']] = preserve_metadata("middle", last, line[key['a']])
             other_line[key['d']] = "notes"
             other_line[key['f']] = ""
             if len(description) > 1:
@@ -276,7 +279,8 @@ def checkbox_mutex_other (line, kind = "checkbox", detail_kind = "descriptive", 
         sys.stderr.write("Error processing record %s, please check that a mutex field ('none', 'unknown', 'result not known',"
             "'unknown/not documented', 'unknown or not reported') exists in the options for the question.\n" % line[key['a']])
         sys.exit()
-    new_lines[-1][key['a']] = preserve_metadata("end", "_%s" % clean(x), line[key['a']])
+
+    new_lines[-1][key['a']] = preserve_metadata("end", last, line[key['a']])
     return new_lines
 
 def value_units(line, kind = "dropdown", units = [], just_units = False):
