@@ -37,6 +37,13 @@ try:
 except:
     pluralize = lambda x : "%ss" % x
 
+
+class FakeOptions:
+    auto = False
+    prompt = True
+    validation_off = True
+    groups = False
+
 # Users can specify a file that maps group names to their correct pluralization
 plurals = {}
 if os.path.isfile("plurals.json"):
@@ -713,9 +720,12 @@ def find_group(lines):
 def main(input_file, output_file):
 
     temp_file = os.tmpfile() 
-
-    handle_in = open(input_file, 'rU')
-    handle_out = open(output_file, 'wb')
+    if type(input_file) is str:
+       handle_in = open(input_file, 'rU')
+       handle_out = open(output_file, 'wb')
+    else:
+       handle_in = input_file
+       handle_out = output_file
 
     input_f = csv.reader(handle_in)
     output_f = csv.writer(temp_file)
@@ -755,8 +765,9 @@ def main(input_file, output_file):
                 output_f.writerow(row)
             group = []
 
-    handle_out.close()
     temp_file.close()
+    if type(input_file) is str:
+       handle_out.close()
 
 
 if __name__ == "__main__":
@@ -783,3 +794,5 @@ if __name__ == "__main__":
         logger.setLevel(logging.DEBUG)
 
     main(args[0], args[1])
+else:
+    options = FakeOptions()
