@@ -490,7 +490,7 @@ def repeat_group(group, path=[], ids={}, depth=0, iterations=[], parent_group=[]
                 if line[key['a']].split(" ")[0] == other_id_match.group(1):
                     if line[key['j']].isdigit():
                         times = int(line[key['j']])
-                    break
+                        break
             else:
                 times = options.max_repeat
             show_instance = other_id_match.group(1)
